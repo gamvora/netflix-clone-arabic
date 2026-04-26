@@ -57,27 +57,41 @@ const API = {
     return this.fetchMultiPage(ENDPOINTS[category], pages);
   },
 
-  // Movie details (Arabic with English fallback)
+  // Movie details (Arabic with English fallback for overview AND videos)
   async getMovieDetails(id) {
     const arData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE}`);
-    if (arData && (!arData.overview || arData.overview.trim() === '')) {
+    const needsOverview = arData && (!arData.overview || arData.overview.trim() === '');
+    const needsVideos = arData && (!arData.videos || !arData.videos.results || arData.videos.results.length === 0);
+    if (needsOverview || needsVideos) {
       const enData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
-      if (enData && enData.overview) {
-        arData.overview = enData.overview;
-        if (!arData.title || arData.title === arData.original_title) arData.title = enData.title || arData.title;
+      if (enData) {
+        if (needsOverview && enData.overview) {
+          arData.overview = enData.overview;
+          if (!arData.title || arData.title === arData.original_title) arData.title = enData.title || arData.title;
+        }
+        if (needsVideos && enData.videos && enData.videos.results) {
+          arData.videos = enData.videos;
+        }
       }
     }
     return arData;
   },
 
-  // TV details
+  // TV details (Arabic with English fallback for overview AND videos)
   async getTVDetails(id) {
     const arData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE}`);
-    if (arData && (!arData.overview || arData.overview.trim() === '')) {
+    const needsOverview = arData && (!arData.overview || arData.overview.trim() === '');
+    const needsVideos = arData && (!arData.videos || !arData.videos.results || arData.videos.results.length === 0);
+    if (needsOverview || needsVideos) {
       const enData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
-      if (enData && enData.overview) {
-        arData.overview = enData.overview;
-        if (!arData.name || arData.name === arData.original_name) arData.name = enData.name || arData.name;
+      if (enData) {
+        if (needsOverview && enData.overview) {
+          arData.overview = enData.overview;
+          if (!arData.name || arData.name === arData.original_name) arData.name = enData.name || arData.name;
+        }
+        if (needsVideos && enData.videos && enData.videos.results) {
+          arData.videos = enData.videos;
+        }
       }
     }
     return arData;
