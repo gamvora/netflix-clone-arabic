@@ -6,7 +6,7 @@ A complete Netflix-style streaming site with Arabic RTL interface and Arabic sub
 
 ## 🌐 Live Demo
 
-🔗 **[View Live Site](https://alaazimmo.github.io/netflix-clone-arabic/)**
+🔗 **[View Live Site](https://gamvora.github.io/netflix-clone-arabic/)**
 
 ## ✨ Features
 
