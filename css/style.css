@@ -1354,3 +1354,146 @@ img { max-width: 100%; display: block; }
     width: 200px !important;
   }
 }
+
+
+/* ================================================================
+   ANDROID TV REMOTE NAVIGATION - FOCUS STYLES
+   ================================================================ */
+
+/* Base focus indicator - strong visible outline for TV remote */
+body.tv-nav-ready *:focus-visible {
+  outline: 3px solid #e50914 !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(229, 9, 20, 0.3), 0 0 20px rgba(229, 9, 20, 0.5);
+  z-index: 10;
+  position: relative;
+}
+
+/* Remove default focus on body */
+body.tv-nav-ready:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Card focus - scale up like Netflix */
+body.tv-nav-ready .card:focus-visible,
+body.tv-nav-ready .sim-card:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px #e50914, 0 8px 30px rgba(229, 9, 20, 0.6);
+  transform: scale(1.08);
+  z-index: 20;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Nav links focus */
+body.tv-nav-ready .nav-link:focus-visible,
+body.tv-nav-ready .logo:focus-visible {
+  outline: 2px solid #e50914 !important;
+  outline-offset: 4px;
+  background: rgba(229, 9, 20, 0.15);
+  border-radius: 4px;
+  color: #fff !important;
+}
+
+/* Hero buttons focus */
+body.tv-nav-ready .hero-btn:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(229, 9, 20, 0.4);
+  transform: scale(1.05);
+}
+
+/* Icon buttons focus (player, navbar, search, profile) */
+body.tv-nav-ready .nf-icon-btn:focus-visible,
+body.tv-nav-ready .nf-tv-btn:focus-visible,
+body.tv-nav-ready .btn-icon:focus-visible,
+body.tv-nav-ready .search-btn:focus-visible,
+body.tv-nav-ready .profile:focus-visible {
+  outline: 3px solid #e50914 !important;
+  outline-offset: 2px;
+  background: rgba(229, 9, 20, 0.25) !important;
+  transform: scale(1.1);
+}
+
+/* Episode cards (watch page) focus */
+body.tv-nav-ready .nf-ep-card:focus-visible {
+  outline: 3px solid #e50914 !important;
+  outline-offset: 0;
+  background: rgba(229, 9, 20, 0.15);
+  transform: scale(1.02);
+}
+
+/* Season tab focus */
+body.tv-nav-ready .nf-season-tab:focus-visible {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px;
+  background: #e50914 !important;
+  color: #fff !important;
+}
+
+/* Genre chip focus */
+body.tv-nav-ready .genre-chip:focus-visible {
+  outline: 2px solid #e50914 !important;
+  outline-offset: 2px;
+  background: rgba(229, 9, 20, 0.3) !important;
+  color: #fff !important;
+  transform: scale(1.08);
+}
+
+/* Continue watching buttons */
+body.tv-nav-ready .continue-play:focus-visible,
+body.tv-nav-ready .continue-remove:focus-visible {
+  outline: 3px solid #fff !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #e50914;
+}
+
+/* Input focus */
+body.tv-nav-ready input:focus-visible,
+body.tv-nav-ready textarea:focus-visible,
+body.tv-nav-ready select:focus-visible {
+  outline: 2px solid #e50914 !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.25);
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Make sure focused elements are never hidden by overflow */
+body.tv-nav-ready .row-content,
+body.tv-nav-ready .nf-episodes-list {
+  overflow: visible;
+}
+
+/* But keep horizontal scroll working */
+body.tv-nav-ready .row-content {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Smooth transitions for focus */
+body.tv-nav-ready .card,
+body.tv-nav-ready .sim-card,
+body.tv-nav-ready .hero-btn,
+body.tv-nav-ready .nf-icon-btn,
+body.tv-nav-ready .nf-ep-card,
+body.tv-nav-ready .genre-chip {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, outline 0.1s ease;
+}
+
+/* Larger scroll padding for TV so focused items aren't at the edge */
+html {
+  scroll-padding-top: 100px;
+  scroll-padding-bottom: 100px;
+  scroll-padding-left: 50px;
+  scroll-padding-right: 50px;
+}
+
+/* Hide mouse cursor on TV (optional, triggered by no-mouse movement) */
+body.tv-mode {
+  cursor: none !important;
+}
+
+body.tv-mode * {
+  cursor: none !important;
+}
