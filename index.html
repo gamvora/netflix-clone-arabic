@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix - الرئيسية | شاهد أفلامك ومسلسلاتك المفضلة</title>
+  <meta name="description" content="منصة Netflix العربية - شاهد أحدث الأفلام والمسلسلات مع ترجمة عربية كاملة">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914'>N</text></svg>">
+  
+  <link rel="stylesheet" href="css/style.css?v=130">
+  <link rel="stylesheet" href="css/responsive.css?v=130">
+</head>
+<body>
+
+  <div class="main-loader" id="mainLoader">
+    <div class="loader-logo">NETFLIX</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html" class="logo">NETFLIX</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">الرئيسية</a></li>
+        <li><a href="tvshows.html">مسلسلات</a></li>
+        <li><a href="movies.html">أفلام</a></li>
+        <li><a href="mylist.html">قائمتي</a></li>
+        <li><a href="search.html">بحث</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <a href="search.html" class="nav-search" title="بحث"><i class="fas fa-search"></i></a>
+      <div class="nav-profile" title="الملف الشخصي">U</div>
+      <button class="menu-toggle" title="القائمة"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <section class="hero" id="hero"></section>
+
+  <section class="rows-section">
+    
+    <!-- Continue Watching (hidden if empty) -->
+    <div class="row row-continue-wrapper" id="row-continue-parent" style="display:none;">
+      <div class="row-header">
+        <h2 class="row-title"><i class="fas fa-history"></i> متابعة المشاهدة</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-continue"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title"><i class="fas fa-fire"></i> الأكثر رواجاً هذا الأسبوع</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-trending"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title"><i class="fas fa-bolt"></i> رائج اليوم</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-trending-day"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">مسلسلات Netflix الأصلية</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-netflix"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">يُعرض الآن في السينما</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-now-playing"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">قادم قريباً</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-upcoming"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">الأعلى تقييماً</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-top-rated"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أفلام أكشن</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-action"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أفلام كوميدية</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-comedy"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">خيال علمي</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-scifi"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أفلام رعب</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-horror"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أفلام رومانسية</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-romance"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">مسلسلات شائعة</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-tv"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">مسلسلات كورية</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-korean"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أنمي</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-anime"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">رسوم متحركة</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-animation"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-header">
+        <h2 class="row-title">أفلام وثائقية</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-docs"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+    
+  </section>
+
+  <div class="modal" id="detailsModal">
+    <div class="modal-content">
+      <button class="modal-close"><i class="fas fa-times"></i></button>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+
+  <div class="trailer-modal" id="trailerModal">
+    <div class="trailer-content">
+      <button class="modal-close" style="position: absolute; top: 10px; right: 10px; z-index: 10;"><i class="fas fa-times"></i></button>
+      <iframe allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+    <div class="footer-grid">
+      <a href="#">الصوت والترجمات</a>
+      <a href="#">وصف الصوت</a>
+      <a href="#">مركز المساعدة</a>
+      <a href="#">بطاقات الهدايا</a>
+      <a href="#">الوسائط</a>
+      <a href="#">علاقات المستثمرين</a>
+      <a href="#">الوظائف</a>
+      <a href="#">الشروط والأحكام</a>
+      <a href="#">الخصوصية</a>
+      <a href="#">إعدادات الكوكيز</a>
+      <a href="#">اتصل بنا</a>
+      <a href="#">معلومات الشركة</a>
+    </div>
+    <p class="footer-copyright">
+      © 2025 Netflix Clone - مشروع تعليمي. البيانات من 
+      <a href="https://www.themoviedb.org/" target="_blank" style="color: var(--netflix-red);">TMDB</a>
+    </p>
+  </footer>
+
+  <script src="js/config.js?v=130"></script>
+  <script src="js/api.js?v=130"></script>
+  <script src="js/utils.js?v=130"></script>
+  <script src="js/main.js?v=130"></script>
+</body>
+</html>

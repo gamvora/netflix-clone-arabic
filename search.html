@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بحث | Netflix</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914'>N</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=130">
+  <link rel="stylesheet" href="css/responsive.css?v=130">
+</head>
+<body>
+
+  <nav class="navbar scrolled">
+    <div class="nav-left">
+      <a href="index.html" class="logo">NETFLIX</a>
+      <ul class="nav-links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="tvshows.html">مسلسلات</a></li>
+        <li><a href="movies.html">أفلام</a></li>
+        <li><a href="mylist.html">قائمتي</a></li>
+        <li><a href="search.html" class="active">بحث</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <div class="nav-profile">U</div>
+      <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="search-container">
+    <div class="search-bar-wrap">
+      <input type="text" id="searchInput" class="search-bar" placeholder="ابحث عن أفلام أو مسلسلات..." autocomplete="off">
+      <i class="fas fa-search search-icon-big"></i>
+    </div>
+    
+    <div class="search-status" id="searchStatus"></div>
+    
+    <div class="search-results" id="searchResults">
+      <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3>ابحث عن أفلامك ومسلسلاتك المفضلة</h3>
+        <p>اكتب اسم الفيلم أو المسلسل في مربع البحث أعلاه</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="detailsModal">
+    <div class="modal-content">
+      <button class="modal-close"><i class="fas fa-times"></i></button>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+  
+  <div class="trailer-modal" id="trailerModal">
+    <div class="trailer-content">
+      <button class="modal-close" style="position: absolute; top: 10px; right: 10px; z-index: 10;"><i class="fas fa-times"></i></button>
+      <iframe allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=130"></script>
+  <script src="js/api.js?v=130"></script>
+  <script src="js/utils.js?v=130"></script>
+  <script src="js/search.js?v=130"></script>
+</body>
+</html>
