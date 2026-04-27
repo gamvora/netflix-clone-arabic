@@ -68,6 +68,21 @@ const MoviesPage = {
     Utils.renderRow('row-family', family);
     
     Utils.setupCarouselScroll();
+    
+    // Handle ?genre= URL param → scroll to matching row & highlight
+    const params = new URLSearchParams(window.location.search);
+    const genre = params.get('genre');
+    if (genre) {
+      const rowMap = {
+        action: 'row-action', comedy: 'row-comedy', horror: 'row-horror',
+        romance: 'row-romance', scifi: 'row-scifi', animation: 'row-animation',
+        thriller: 'row-thriller', crime: 'row-crime', fantasy: 'row-fantasy',
+        adventure: 'row-adventure', family: 'row-family', popular: 'row-popular',
+        'top-rated': 'row-top-rated', upcoming: 'row-upcoming'
+      };
+      const rowId = rowMap[genre.toLowerCase()];
+      if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);
+    }
   }
 };
 

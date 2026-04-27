@@ -569,12 +569,29 @@ body.player-mode .footer {
 
 @media (max-width: 480px) {
   .nf-ep-card {
-    grid-template-columns: 30px 1fr;
+    grid-template-columns: 24px 110px 1fr;
     gap: 10px;
+    padding: 10px 8px;
   }
 
   .nf-ep-thumb {
-    display: none;
+    width: 110px;
+    height: 62px;
+    border-radius: 4px;
+  }
+
+  .nf-ep-info h4 {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .nf-ep-info p {
+    font-size: 11px;
+    -webkit-line-clamp: 2;
+  }
+
+  .nf-ep-meta {
+    font-size: 10px;
   }
 }
 

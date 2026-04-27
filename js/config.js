@@ -5,8 +5,8 @@ const CONFIG = {
   IMG_URL: 'https://image.tmdb.org/t/p/original',
   IMG_URL_W500: 'https://image.tmdb.org/t/p/w500',
   IMG_URL_W300: 'https://image.tmdb.org/t/p/w300',
-  LANGUAGE: 'ar',
-  LANGUAGE_FALLBACK: 'en-US',
+  LANGUAGE: 'en-US',           // English titles only (user request)
+  LANGUAGE_FALLBACK: 'ar',     // Arabic for descriptions (fallback)
   REGION: 'SA',
   DEFAULT_BACKDROP: 'https://via.placeholder.com/1920x1080/141414/E50914?text=NETFLIX',
   DEFAULT_POSTER: 'https://via.placeholder.com/500x750/141414/E50914?text=No+Image'

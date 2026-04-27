@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=130">
-  <link rel="stylesheet" href="css/responsive.css?v=130">
+  <link rel="stylesheet" href="css/style.css?v=150">
+  <link rel="stylesheet" href="css/responsive.css?v=150">
 </head>
 <body>
 
@@ -23,6 +23,23 @@
         <li><a href="index.html">الرئيسية</a></li>
         <li><a href="tvshows.html">مسلسلات</a></li>
         <li><a href="movies.html" class="active">أفلام</a></li>
+        <li class="nav-dropdown">
+          <a href="#" class="nav-dropdown-toggle">تصفح حسب النوع <i class="fas fa-caret-down"></i></a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="movies.html?genre=action"><i class="fas fa-fist-raised"></i>أكشن</a></li>
+            <li><a href="movies.html?genre=comedy"><i class="fas fa-laugh"></i>كوميدي</a></li>
+            <li><a href="movies.html?genre=horror"><i class="fas fa-ghost"></i>رعب</a></li>
+            <li><a href="movies.html?genre=romance"><i class="fas fa-heart"></i>رومانسي</a></li>
+            <li><a href="movies.html?genre=scifi"><i class="fas fa-rocket"></i>خيال علمي</a></li>
+            <li><a href="movies.html?genre=thriller"><i class="fas fa-user-secret"></i>إثارة</a></li>
+            <li><a href="movies.html?genre=animation"><i class="fas fa-magic"></i>رسوم متحركة</a></li>
+            <li><a href="movies.html?genre=documentary"><i class="fas fa-film"></i>وثائقي</a></li>
+            <li><a href="tvshows.html?genre=korean"><i class="fas fa-star"></i>كوري</a></li>
+            <li><a href="tvshows.html?genre=anime"><i class="fas fa-dragon"></i>أنمي</a></li>
+            <li><a href="tvshows.html?genre=crime"><i class="fas fa-mask"></i>جريمة</a></li>
+            <li><a href="tvshows.html?genre=drama"><i class="fas fa-theater-masks"></i>دراما</a></li>
+          </ul>
+        </li>
         <li><a href="mylist.html">قائمتي</a></li>
         <li><a href="search.html">بحث</a></li>
       </ul>
@@ -193,10 +210,10 @@
     <p class="footer-copyright">© 2025 Netflix Clone. البيانات من TMDB</p>
   </footer>
 
-  <script src="js/config.js?v=130"></script>
-  <script src="js/api.js?v=130"></script>
-  <script src="js/utils.js?v=130"></script>
-  <script src="js/movies.js?v=130"></script>
+  <script src="js/config.js?v=150"></script>
+  <script src="js/api.js?v=150"></script>
+  <script src="js/utils.js?v=150"></script>
+  <script src="js/movies.js?v=150"></script>
   <script src="js/tv-nav.js?v=1"></script>
 </body>
 </html>

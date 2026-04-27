@@ -1,4 +1,5 @@
 // API Service - Handles all TMDB API calls
+// Strategy: Fetch English (for titles) + Arabic (for overviews) in parallel, merge overviews
 const API = {
   
   // Generic fetch function
@@ -14,98 +15,187 @@ const API = {
     }
   },
 
-  // Fetch multiple pages and combine (for freshness + more content)
-  async fetchMultiPage(endpoint, pages = 1) {
-    const promises = [];
-    for (let p = 1; p <= pages; p++) {
-      const separator = endpoint.includes('?') ? '&' : '?';
-      promises.push(this.fetchData(`${endpoint}${separator}page=${p}`));
-    }
-    const results = await Promise.all(promises);
-    const all = [];
-    results.forEach(r => {
-      if (r && r.results) all.push(...r.results);
+  // Fetch a list endpoint in BOTH English and Arabic, merge overviews
+  // English is primary (for titles), Arabic supplements with overview_ar
+  async fetchBilingual(endpoint, pages = 2) {
+    // Build English + Arabic variants
+    const makeUrl = (lang) => {
+      // Replace language= param with the desired language
+      return endpoint.replace(/language=[^&]+/, `language=${lang}`);
+    };
+    
+    const enEndpoint = makeUrl(CONFIG.LANGUAGE);           // en-US
+    const arEndpoint = makeUrl(CONFIG.LANGUAGE_FALLBACK);  // ar
+    
+    const fetchPages = async (ep) => {
+      const promises = [];
+      for (let p = 1; p <= pages; p++) {
+        const sep = ep.includes('?') ? '&' : '?';
+        promises.push(this.fetchData(`${ep}${sep}page=${p}`));
+      }
+      const results = await Promise.all(promises);
+      const all = [];
+      results.forEach(r => { if (r && r.results) all.push(...r.results); });
+      return all;
+    };
+    
+    const [enAll, arAll] = await Promise.all([
+      fetchPages(enEndpoint),
+      fetchPages(arEndpoint)
+    ]);
+    
+    // Build Arabic overview lookup by id
+    const arMap = new Map();
+    arAll.forEach(item => {
+      if (item && item.id) arMap.set(item.id, item);
     });
-    // Deduplicate by id+media_type
+    
+    // Merge Arabic overview into English items + deduplicate
     const seen = new Set();
-    return all.filter(item => {
+    const merged = [];
+    enAll.forEach(item => {
+      if (!item || !item.id) return;
       const key = `${item.id}_${item.media_type || 'x'}`;
-      if (seen.has(key)) return false;
+      if (seen.has(key)) return;
       seen.add(key);
-      return true;
+      
+      const arItem = arMap.get(item.id);
+      if (arItem) {
+        if (arItem.overview && arItem.overview.trim()) {
+          item.overview_ar = arItem.overview;
+        }
+      }
+      merged.push(item);
     });
+    
+    return merged;
+  },
+
+  // Legacy single-language fetch (kept for compatibility)
+  async fetchMultiPage(endpoint, pages = 1) {
+    return this.fetchBilingual(endpoint, pages);
   },
 
   // Get trending
   async getTrending() {
-    return this.fetchMultiPage(ENDPOINTS.trending, 2);
+    return this.fetchBilingual(ENDPOINTS.trending, 2);
   },
 
   async getTrendingDay() {
-    const data = await this.fetchData(ENDPOINTS.trendingDay);
-    return data.results || [];
+    return this.fetchBilingual(ENDPOINTS.trendingDay, 1);
   },
 
   // Netflix Originals
   async getNetflixOriginals() {
-    return this.fetchMultiPage(ENDPOINTS.netflixOriginals, 2);
+    return this.fetchBilingual(ENDPOINTS.netflixOriginals, 2);
   },
 
-  // Get content by category (with multi-page)
+  // Get content by category
   async getMoviesByCategory(category, pages = 2) {
     if (!ENDPOINTS[category]) return [];
-    return this.fetchMultiPage(ENDPOINTS[category], pages);
+    return this.fetchBilingual(ENDPOINTS[category], pages);
   },
 
-  // Movie details (Arabic with English fallback)
+  // Movie details - English primary, Arabic overview supplement
   async getMovieDetails(id) {
-    const arData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE}`);
-    if (arData && (!arData.overview || arData.overview.trim() === '')) {
-      const enData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
-      if (enData && enData.overview) {
-        arData.overview = enData.overview;
-        if (!arData.title || arData.title === arData.original_title) arData.title = enData.title || arData.title;
+    const enData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE}`);
+    if (!enData || !enData.id) return enData;
+    try {
+      const arData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
+      if (arData && arData.overview && arData.overview.trim() !== '') {
+        enData.overview_ar = arData.overview;
+        enData.title_ar = arData.title && arData.title !== enData.title ? arData.title : '';
       }
-    }
-    return arData;
+      // Merge similar/recommendations overviews too
+      if (arData && arData.similar && arData.similar.results && enData.similar && enData.similar.results) {
+        const arSimMap = new Map(arData.similar.results.map(s => [s.id, s]));
+        enData.similar.results.forEach(s => {
+          const arS = arSimMap.get(s.id);
+          if (arS && arS.overview) s.overview_ar = arS.overview;
+        });
+      }
+    } catch (e) {}
+    return enData;
   },
 
-  // TV details
+  // TV details - English primary, Arabic supplement
   async getTVDetails(id) {
-    const arData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE}`);
-    if (arData && (!arData.overview || arData.overview.trim() === '')) {
-      const enData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
-      if (enData && enData.overview) {
-        arData.overview = enData.overview;
-        if (!arData.name || arData.name === arData.original_name) arData.name = enData.name || arData.name;
+    const enData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE}`);
+    if (!enData || !enData.id) return enData;
+    try {
+      const arData = await this.fetchData(`${ENDPOINTS.tvDetails(id)}&language=${CONFIG.LANGUAGE_FALLBACK}`);
+      if (arData && arData.overview && arData.overview.trim() !== '') {
+        enData.overview_ar = arData.overview;
+        enData.name_ar = arData.name && arData.name !== enData.name ? arData.name : '';
       }
-    }
-    return arData;
+      if (arData && arData.similar && arData.similar.results && enData.similar && enData.similar.results) {
+        const arSimMap = new Map(arData.similar.results.map(s => [s.id, s]));
+        enData.similar.results.forEach(s => {
+          const arS = arSimMap.get(s.id);
+          if (arS && arS.overview) s.overview_ar = arS.overview;
+        });
+      }
+    } catch (e) {}
+    return enData;
   },
 
-  // Season details
+  // Season details - English primary with Arabic episode descriptions
   async getSeasonDetails(tvId, seasonNumber) {
-    const ar = await this.fetchData(`/tv/${tvId}/season/${seasonNumber}?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE}`);
-    if (ar && ar.episodes && ar.episodes.some(e => !e.overview)) {
-      const en = await this.fetchData(`/tv/${tvId}/season/${seasonNumber}?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE_FALLBACK}`);
-      if (en && en.episodes) {
-        ar.episodes = ar.episodes.map(ep => {
-          const enEp = en.episodes.find(e => e.episode_number === ep.episode_number);
-          if (enEp && !ep.overview) ep.overview = enEp.overview;
+    const en = await this.fetchData(`/tv/${tvId}/season/${seasonNumber}?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE}`);
+    if (!en || !en.episodes) return en;
+    try {
+      const ar = await this.fetchData(`/tv/${tvId}/season/${seasonNumber}?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE_FALLBACK}`);
+      if (ar && ar.episodes) {
+        en.episodes = en.episodes.map(ep => {
+          const arEp = ar.episodes.find(e => e.episode_number === ep.episode_number);
+          if (arEp && arEp.overview && arEp.overview.trim()) {
+            ep.overview_ar = arEp.overview;
+          }
           return ep;
         });
       }
-    }
-    return ar;
+    } catch (e) {}
+    return en;
   },
 
-  // Search
+  // Search - in English primarily, user can type Arabic and we'll also search Arabic
   async search(query) {
     if (!query || query.trim() === '') return [];
-    const data = await this.fetchData(ENDPOINTS.searchMulti(query));
-    return (data.results || []).filter(item => 
+    
+    const enUrl = `/search/multi?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE}&query=${encodeURIComponent(query)}&include_adult=false`;
+    const arUrl = `/search/multi?api_key=${CONFIG.API_KEY}&language=${CONFIG.LANGUAGE_FALLBACK}&query=${encodeURIComponent(query)}&include_adult=false`;
+    
+    const [en, ar] = await Promise.all([this.fetchData(enUrl), this.fetchData(arUrl)]);
+    const enResults = (en.results || []).filter(item => 
       item.media_type !== 'person' && (item.poster_path || item.backdrop_path)
     );
+    const arResults = (ar.results || []).filter(item => 
+      item.media_type !== 'person' && (item.poster_path || item.backdrop_path)
+    );
+    
+    // Merge: English primary, add Arabic-only results + overview_ar
+    const arMap = new Map(arResults.map(r => [r.id, r]));
+    const seen = new Set();
+    const merged = [];
+    
+    enResults.forEach(item => {
+      const key = `${item.id}_${item.media_type}`;
+      seen.add(key);
+      const arItem = arMap.get(item.id);
+      if (arItem && arItem.overview) item.overview_ar = arItem.overview;
+      merged.push(item);
+    });
+    
+    // Add Arabic-only results that weren't in English results
+    arResults.forEach(item => {
+      const key = `${item.id}_${item.media_type}`;
+      if (!seen.has(key)) {
+        merged.push(item);
+        seen.add(key);
+      }
+    });
+    
+    return merged;
   },
 
   // Get homepage data in one go

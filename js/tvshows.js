@@ -63,6 +63,20 @@ const TVPage = {
     Utils.renderRow('row-arabic', arabicTV);
     
     Utils.setupCarouselScroll();
+    
+    // Handle ?genre= URL param
+    const params = new URLSearchParams(window.location.search);
+    const genre = params.get('genre');
+    if (genre) {
+      const rowMap = {
+        netflix: 'row-netflix', popular: 'row-popular', 'top-rated': 'row-top-rated',
+        'on-air': 'row-on-air', action: 'row-action', drama: 'row-drama',
+        comedy: 'row-comedy', crime: 'row-crime', scifi: 'row-scifi',
+        korean: 'row-korean', anime: 'row-anime', arabic: 'row-arabic'
+      };
+      const rowId = rowMap[genre.toLowerCase()];
+      if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);
+    }
   }
 };
 

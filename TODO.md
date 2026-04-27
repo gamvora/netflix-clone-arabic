@@ -1,59 +1,42 @@
-# Netflix Clone - Build Complete ✅
+# Netflix Clone - Improvements Phase
 
-## Project Summary
-Full Netflix-style streaming site with Arabic RTL UI, English movie titles, and streaming via 2embed.cc (supports Arabic subtitles).
+## User Requirements
+- [x] Continue Watching shows "الموسم X - الحلقة Y" in Arabic
+- [x] Genre dropdown in navbar
+- [ ] **ALL movie titles in English only** (no Chinese/Korean scripts)
+- [ ] **ALL descriptions in Arabic ONLY** (no English underneath)
+- [ ] **Trailer button for every movie/show** (hero + modal)
+- [ ] **Mobile: episode thumbnails visible** (fix current tight grid)
+- [ ] **Better UI** matching Netflix exactly
+- [ ] Genre dropdown routes to scrolled+highlighted row
+- [ ] No server changes (keep videasy player)
 
-## Completed Features
+## Implementation Steps
 
-### Pages ✅
-- [x] `index.html` - Homepage with hero banner + content rows
-- [x] `movies.html` - Movies browse page
-- [x] `tvshows.html` - TV shows browse page  
-- [x] `search.html` - Live search page
-- [x] `mylist.html` - My List (favorites, localStorage)
-- [x] `watch.html` - Video player page
+### 1. Data Layer - Arabic overviews in list endpoints
+- [ ] `js/api.js`: Modify `fetchMultiPage` to fetch both en-US + ar versions and merge overviews as `overview_ar`
+- [ ] `js/api.js`: Keep `getTrending`, `getMoviesByCategory` etc. using the enhanced function
 
-### Styling ✅
-- [x] `css/style.css` - Main Netflix-style design (dark theme, red accents)
-- [x] `css/player.css` - Netflix player UI (top bar, episode nav, loader)
-- [x] `css/responsive.css` - Mobile/tablet responsive
+### 2. Utils - Display helpers
+- [ ] `js/utils.js`: Add `getOverview(item)` → returns Arabic overview only (fallback to English only if Arabic missing)
+- [ ] `js/utils.js`: Stricter `getTitle` — always Latin (English), never Chinese/Korean
+- [ ] `js/utils.js`: `openDetailsModal` — remove English overview line, use `getOverview` only
+- [ ] `js/utils.js`: `openDetailsModal` — always show trailer button (fallback YouTube search if no TMDB trailer)
+- [ ] `js/utils.js`: Add hero trailer button helper
 
-### JavaScript ✅
-- [x] `js/config.js` - TMDB API config (Arabic + English fallback)
-- [x] `js/api.js` - API abstraction with language fallback
-- [x] `js/utils.js` - Helpers (English titles, Arabic formatting)
-- [x] `js/main.js` - Homepage logic (hero rotation, carousels)
-- [x] `js/movies.js` - Movies page
-- [x] `js/tvshows.js` - TV shows page
-- [x] `js/search.js` - Search functionality
-- [x] `js/mylist.js` - Favorites management
-- [x] `js/player.js` - Netflix-style player with 2embed.cc
+### 3. Hero & Pages - Arabic descriptions
+- [ ] `js/main.js`: Use `getOverview` for hero overview + add trailer button in hero actions
+- [ ] `js/movies.js`: Use `getOverview` for page hero + add trailer button + handle `?genre=` param
+- [ ] `js/tvshows.js`: Same as movies
 
-### Subtitles ✅
-- [x] `subtitles/sample-ar.vtt` - Arabic subtitle sample
-- [x] `subtitles/sample-en.vtt` - English subtitle sample
+### 4. Mobile Fixes
+- [ ] `css/player.css`: Ensure `.nf-ep-thumb` visible on small screens (wider + cleaner)
+- [ ] `css/responsive.css`: Audit mobile nav, rows, cards
 
-## Key Design Decisions
-1. **2embed.cc** as single streaming server (most reliable, has Arabic subs)
-2. **Netflix overlay** always visible above iframe (top bar, title, back, fullscreen)
-3. **English movie titles** (Fight Club, Inception) with Arabic UI/descriptions
-4. **Arabic RTL layout** throughout
-5. **Cross-origin iframe** = limited player control, so 2embed handles playback
+### 5. UI Polish (Netflix-accurate)
+- [ ] `css/style.css`: Tighter hero meta, refined dropdown, smoother transitions
+- [ ] Trailer button styling (icon + text)
+- [ ] Genre highlighting animation
 
-## How to Run
-1. Open terminal in project directory
-2. Run: `python -m http.server 8000`
-3. Open browser: `http://localhost:8000/index.html`
-
-## Features Working
-- ✅ Homepage with hero banner, rotating featured content
-- ✅ Multiple content rows (Trending, Top Rated, Netflix Originals, etc.)
-- ✅ Movie/TV show detail modals
-- ✅ Search with live results
-- ✅ My List (add/remove favorites, persists in localStorage)
-- ✅ Watch page with Netflix top bar (title, back, fullscreen, episode nav)
-- ✅ Video streaming via 2embed.cc (Arabic subtitle support in player settings)
-- ✅ TV shows with season/episode switching
-- ✅ Prev/Next episode navigation
-- ✅ Keyboard shortcuts (Esc = back, F = fullscreen)
-- ✅ Responsive mobile/tablet/desktop
+### 6. Cache Bust
+- [ ] Bump all `?v=140` → `?v=150` in all HTML files
