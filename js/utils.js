@@ -61,7 +61,7 @@ const Utils = {
     const episode = opts.episode || null;
 
     // Default server preference from localStorage (Videasy if nothing saved)
-    const VALID_SERVERS = ['videasy', 'vidsrcicu'];
+    const VALID_SERVERS = ['videasy', 'vidsrccc'];
     let defaultServer = 'videasy';
     try {
       const saved = localStorage.getItem(`netflixServer_${type}_${id}`)
@@ -99,14 +99,14 @@ const Utils = {
             </div>
             <i class="fas fa-chevron-left srv-picker-chev"></i>
           </button>
-          <button class="srv-picker-option ${defaultServer === 'vidsrcicu' ? 'recommended' : ''}" data-server="vidsrcicu">
+          <button class="srv-picker-option ${defaultServer === 'vidsrccc' ? 'recommended' : ''}" data-server="vidsrccc">
             <div class="srv-picker-opt-icon"><i class="fas fa-globe"></i></div>
             <div class="srv-picker-opt-body">
               <div class="srv-picker-opt-title">
                 <span>السيرفر 2</span>
                 <span class="srv-picker-badge alt">بديل</span>
               </div>
-              <div class="srv-picker-opt-desc">مزوّد خارجي مجاني • ترجمة عربية تلقائية (حسب توفرها)</div>
+              <div class="srv-picker-opt-desc">يدعم الأفلام والمسلسلات العربية • ترجمة عربية (حسب التوفر)</div>
             </div>
             <i class="fas fa-chevron-left srv-picker-chev"></i>
           </button>

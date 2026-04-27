@@ -13,12 +13,12 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'vidsrcicu',
-    name: 'VidSrc ICU',
+    id: 'vidsrccc',
+    name: 'VidSrc CC',
     nameAr: 'السيرفر 2',
-    host: 'vidsrc.icu',
-    movieUrl: (id) => `https://vidsrc.icu/embed/movie/${id}?lang=ar&sub=ar&autoplay=1`,
-    tvUrl: (id, s, e) => `https://vidsrc.icu/embed/tv/${id}/${s}/${e}?lang=ar&sub=ar&autoplay=1`
+    host: 'vidsrc.cc',
+    movieUrl: (id) => `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true&lang=ar&sub=ar`,
+    tvUrl: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}?autoPlay=true&lang=ar&sub=ar`
   }
 ];
 
