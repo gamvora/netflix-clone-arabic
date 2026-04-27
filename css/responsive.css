@@ -166,12 +166,22 @@
   .btn i { font-size: 18px; }
   
   .hero-indicators {
-    bottom: 140px;
-    right: 5%;
+    bottom: 132px;
+    right: 4%;
+    max-width: calc(100vw - 24px);
+    padding: 5px 7px;
+    gap: 6px;
   }
-  
-  .indicator { width: 20px; }
-  .indicator.active { width: 32px; }
+
+  .indicator {
+    width: clamp(16px, 5.5vw, 22px);
+    height: 3px;
+    min-width: 14px;
+  }
+
+  .indicator.active {
+    width: clamp(24px, 8vw, 34px);
+  }
   
   /* Rows */
   .row {
@@ -303,6 +313,24 @@
   .hero-overview {
     font-size: 13px;
     -webkit-line-clamp: 2;
+  }
+
+  .hero-indicators {
+    bottom: 118px;
+    right: 3.5%;
+    max-width: calc(100vw - 18px);
+    padding: 4px 6px;
+    gap: 5px;
+  }
+
+  .indicator {
+    width: clamp(14px, 6vw, 18px);
+    height: 3px;
+    min-width: 12px;
+  }
+
+  .indicator.active {
+    width: clamp(20px, 9vw, 28px);
   }
   
   .btn {

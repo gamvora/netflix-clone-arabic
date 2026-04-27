@@ -55,3 +55,11 @@
 - [ ] Run syntax checks for updated JS files
 - [ ] Quick browser verification
 - [ ] Commit and push to GitHub
+
+## 8) New Task: Hero Indicator Responsive Fix
+- [x] Plan approved
+- [x] Review current `.hero-indicators` and `.indicator` styles
+- [x] Improve indicator sizing/spacing for desktop/tablet/mobile
+- [x] Ensure active indicator remains clear on all screen sizes
+- [x] Validate no overlap with hero controls/menu
+- [ ] Final visual QA
