@@ -5,7 +5,7 @@ const TVPage = {
     Utils.setupNavbar();
     Utils.setupModals();
     
-    const [popular, topRated, onAir, airingToday, netflixOriginals, actionTV, comedyTV, dramaTV, crimeTV, sciFiTV, koreanTV, animeTV, arabicTV] = await Promise.all([
+    const [popular, topRated, onAir, airingToday, netflixOriginals, actionTV, comedyTV, dramaTV, crimeTV, sciFiTV, koreanTV, animeTV, arabicTV, asianTV] = await Promise.all([
       API.getMoviesByCategory('popularTV'),
       API.getMoviesByCategory('topRatedTV'),
       API.getMoviesByCategory('onAirTV'),
@@ -18,7 +18,8 @@ const TVPage = {
       API.getMoviesByCategory('sciFiTV'),
       API.getMoviesByCategory('koreanTV'),
       API.getMoviesByCategory('animeTV'),
-      API.getMoviesByCategory('arabicTV')
+      API.getMoviesByCategory('arabicTV'),
+      API.getMoviesByCategory('asianTV')
     ]);
     
     const featured = netflixOriginals[0] || popular[0];
@@ -67,6 +68,7 @@ const TVPage = {
     Utils.renderRow('row-korean', koreanTV);
     Utils.renderRow('row-anime', animeTV);
     Utils.renderRow('row-arabic', arabicTV);
+    Utils.renderRow('row-asian', asianTV);
     
     Utils.setupCarouselScroll();
     
@@ -78,7 +80,7 @@ const TVPage = {
         netflix: 'row-netflix', popular: 'row-popular', 'top-rated': 'row-top-rated',
         'on-air': 'row-on-air', action: 'row-action', drama: 'row-drama',
         comedy: 'row-comedy', crime: 'row-crime', scifi: 'row-scifi',
-        korean: 'row-korean', anime: 'row-anime', arabic: 'row-arabic'
+        korean: 'row-korean', anime: 'row-anime', arabic: 'row-arabic', asian: 'row-asian'
       };
       const rowId = rowMap[genre.toLowerCase()];
       if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);

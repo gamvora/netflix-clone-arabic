@@ -5,7 +5,7 @@ const MoviesPage = {
     Utils.setupNavbar();
     Utils.setupModals();
     
-    const [popular, topRated, nowPlaying, upcoming, action, comedy, horror, romance, scifi, animation, thriller, crime, fantasy, adventure, family] = await Promise.all([
+    const [popular, topRated, nowPlaying, upcoming, action, comedy, horror, romance, scifi, animation, thriller, crime, fantasy, adventure, family, arabicMovies, asianMovies] = await Promise.all([
       API.getMoviesByCategory('popularMovies'),
       API.getMoviesByCategory('topRatedMovies'),
       API.getMoviesByCategory('nowPlayingMovies'),
@@ -20,7 +20,9 @@ const MoviesPage = {
       API.getMoviesByCategory('crimeMovies'),
       API.getMoviesByCategory('fantasyMovies'),
       API.getMoviesByCategory('adventureMovies'),
-      API.getMoviesByCategory('familyMovies')
+      API.getMoviesByCategory('familyMovies'),
+      API.getMoviesByCategory('arabicMovies'),
+      API.getMoviesByCategory('asianMovies')
     ]);
     
     // Set featured hero
@@ -72,6 +74,8 @@ const MoviesPage = {
     Utils.renderRow('row-fantasy', fantasy);
     Utils.renderRow('row-adventure', adventure);
     Utils.renderRow('row-family', family);
+    Utils.renderRow('row-arabic', arabicMovies);
+    Utils.renderRow('row-asian', asianMovies);
     
     Utils.setupCarouselScroll();
     
@@ -84,7 +88,8 @@ const MoviesPage = {
         romance: 'row-romance', scifi: 'row-scifi', animation: 'row-animation',
         thriller: 'row-thriller', crime: 'row-crime', fantasy: 'row-fantasy',
         adventure: 'row-adventure', family: 'row-family', popular: 'row-popular',
-        'top-rated': 'row-top-rated', upcoming: 'row-upcoming'
+        'top-rated': 'row-top-rated', upcoming: 'row-upcoming',
+        arabic: 'row-arabic', asian: 'row-asian'
       };
       const rowId = rowMap[genre.toLowerCase()];
       if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);

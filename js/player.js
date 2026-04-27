@@ -8,17 +8,17 @@ const SERVERS = [
     id: 'videasy',
     name: 'Videasy',
     nameAr: 'السيرفر 1',
+    host: 'player.videasy.net',
     movieUrl: (id) => `https://player.videasy.net/movie/${id}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar`,
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: '111movies',
-    name: '111Movies',
+    id: 'vidsrcicu',
+    name: 'VidSrc ICU',
     nameAr: 'السيرفر 2',
-    host: '111movies.com',
-    // 111movies.com — Next.js + FluidPlayer, distinct UI/brand from Videasy, full TMDB integration
-    movieUrl: (id) => `https://111movies.com/movie/${id}`,
-    tvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}`
+    host: 'vidsrc.icu',
+    movieUrl: (id) => `https://vidsrc.icu/embed/movie/${id}?lang=ar&sub=ar&autoplay=1`,
+    tvUrl: (id, s, e) => `https://vidsrc.icu/embed/tv/${id}/${s}/${e}?lang=ar&sub=ar&autoplay=1`
   }
 ];
 
@@ -259,7 +259,6 @@ const Player = {
     const streamUrl = this.buildUrl(this.currentType, this.currentId, this.currentSeason, this.currentEpisode);
     const currentServer = this.getServer(this.currentServerId);
 
-    // Embeddable server (iframe) — opens video directly
     const hostLabel = currentServer.host || new URL(streamUrl).hostname;
     wrapper.innerHTML = `
       <div class="nf-player video-only" id="nfPlayer">

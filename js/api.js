@@ -248,6 +248,10 @@ const API = {
       animationMovies,
       koreanTV,
       animeTV,
+      arabicMovies,
+      arabicTV,
+      asianMovies,
+      asianTV,
       upcomingMovies,
       nowPlayingMovies
     ] = await Promise.all([
@@ -265,6 +269,10 @@ const API = {
       this.getMoviesByCategory('animationMovies'),
       this.getMoviesByCategory('koreanTV'),
       this.getMoviesByCategory('animeTV'),
+      this.getMoviesByCategory('arabicMovies'),
+      this.getMoviesByCategory('arabicTV'),
+      this.getMoviesByCategory('asianMovies'),
+      this.getMoviesByCategory('asianTV'),
       this.getMoviesByCategory('upcomingMovies'),
       this.getMoviesByCategory('nowPlayingMovies')
     ]);
@@ -284,6 +292,10 @@ const API = {
       animationMovies,
       koreanTV,
       animeTV,
+      arabicMovies,
+      arabicTV,
+      asianMovies,
+      asianTV,
       upcomingMovies,
       nowPlayingMovies
     };

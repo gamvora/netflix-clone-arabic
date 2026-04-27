@@ -37,6 +37,8 @@ const ENDPOINTS = {
   popularMovies: `/movie/popular?api_key=${CONFIG.API_KEY}&${L}`,
   upcomingMovies: `/movie/upcoming?api_key=${CONFIG.API_KEY}&${L}`,
   nowPlayingMovies: `/movie/now_playing?api_key=${CONFIG.API_KEY}&${L}`,
+  arabicMovies: `/discover/movie?api_key=${CONFIG.API_KEY}&${L}&with_original_language=ar&sort_by=popularity.desc`,
+  asianMovies: `/discover/movie?api_key=${CONFIG.API_KEY}&${L}&with_origin_country=AS&sort_by=popularity.desc`,
   
   // Genre-based movies (now with language + sort by popularity)
   actionMovies: `/discover/movie?api_key=${CONFIG.API_KEY}&${L}&with_genres=28&sort_by=popularity.desc`,
@@ -69,6 +71,7 @@ const ENDPOINTS = {
   animeTV: `/discover/tv?api_key=${CONFIG.API_KEY}&${L}&with_genres=16&with_original_language=ja&sort_by=popularity.desc`,
   koreanTV: `/discover/tv?api_key=${CONFIG.API_KEY}&${L}&with_original_language=ko&sort_by=popularity.desc`,
   arabicTV: `/discover/tv?api_key=${CONFIG.API_KEY}&${L}&with_original_language=ar&sort_by=popularity.desc`,
+  asianTV: `/discover/tv?api_key=${CONFIG.API_KEY}&${L}&with_origin_country=AS&sort_by=popularity.desc`,
   
   // Details
   movieDetails: (id) => `/movie/${id}?api_key=${CONFIG.API_KEY}&append_to_response=videos,credits,similar,recommendations`,
