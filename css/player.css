@@ -228,23 +228,16 @@ body.player-mode .footer {
   overflow: hidden;
 }
 
-.nf-player.idle .nf-top,
-.nf-player.idle .nf-tv-bottom {
-  opacity: 0;
-  transform: translateY(-20px);
-  pointer-events: none;
-}
-
-/* Force-hide top bar for first seconds after player render */
-.nf-player.top-hidden .nf-top {
+.nf-player.video-only .nf-top,
+.nf-player.video-only .nf-tv-bottom,
+.nf-player.video-only .nf-tv-btn,
+.nf-player.video-only .nf-icon-btn,
+.nf-player.video-only .nf-now-playing,
+.nf-player.video-only .nf-logo-mini {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-}
-
-.nf-player.idle .nf-tv-bottom {
-  transform: translateY(20px);
 }
 
 /* ========== IFRAME ========== */

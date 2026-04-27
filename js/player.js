@@ -77,12 +77,10 @@ const Player = {
     this.currentSeason = season;
     this.currentEpisode = episode;
 
-    // Choose server: URL param > last saved > default (Videasy)
     this.currentServerId = (urlServer && SERVERS.find(s => s.id === urlServer))
       ? urlServer
       : this.getLastServer();
 
-    // Persist so continue-watching works later
     if (urlServer) this.setLastServer(urlServer);
 
     try {
@@ -96,7 +94,6 @@ const Player = {
       return this.showError('خطأ في الاتصال بالخادم');
     }
 
-    // AUTO-PLAY: skip episode picker if episode specified OR if resuming
     const continueList = Utils.getContinueWatching ? Utils.getContinueWatching() : [];
     const isResuming = continueList.some(x => String(x.id) === String(id) && x.type === type);
 
@@ -137,7 +134,6 @@ const Player = {
     }
   },
 
-  // ============ EPISODE PICKER ============
   renderEpisodePicker() {
     const d = this.currentDetails;
     const wrapper = document.getElementById('playerWrapper');
@@ -252,37 +248,13 @@ const Player = {
     }
   },
 
-  // ============ MAIN PLAYER (NO SERVER BUTTON INSIDE) ============
   renderPlayer() {
-    const d = this.currentDetails;
     const wrapper = document.getElementById('playerWrapper');
-    const title = Utils.getTitle(d);
-    const year = (d.release_date || d.first_air_date || '').substring(0, 4);
-    const epLabel = this.currentType === 'tv'
-      ? `الموسم ${this.currentSeason} • الحلقة ${this.currentEpisode}`
-      : year;
-
     const streamUrl = this.buildUrl(this.currentType, this.currentId, this.currentSeason, this.currentEpisode);
     const currentServer = this.getServer(this.currentServerId);
-    const backHref = this.currentType === 'tv'
-      ? `watch.html?id=${this.currentId}&type=tv`
-      : 'index.html';
 
     wrapper.innerHTML = `
-      <div class="nf-player top-hidden" id="nfPlayer">
-        <div class="nf-top" id="nfTop" style="opacity:0 !important;visibility:hidden !important;pointer-events:none !important;display:none !important;">
-          <div class="nf-top-left">
-            <a href="${backHref}" class="nf-icon-btn" title="عودة" tabindex="0">
-              <i class="fas fa-arrow-right"></i>
-            </a>
-            <div class="nf-logo-mini">N</div>
-            <div class="nf-now-playing">
-              <span class="nf-np-label">يُعرض الآن · ${currentServer.nameAr}</span>
-              <span class="nf-np-title">${title} <span class="nf-np-year">(${epLabel})</span></span>
-            </div>
-          </div>
-        </div>
-
+      <div class="nf-player video-only" id="nfPlayer">
         <div class="nf-loader" id="nfLoader">
           <div class="nf-loader-spin"></div>
           <div class="nf-loader-text">جاري التحميل من ${currentServer.nameAr}...</div>
@@ -298,86 +270,19 @@ const Player = {
           frameborder="0"
           loading="eager"
         ></iframe>
-
-        ${this.currentType === 'tv' ? `
-          <div class="nf-tv-bottom" id="nfTvBottom">
-            <button class="nf-tv-btn" id="prevEpBtn" tabindex="0">
-              <i class="fas fa-step-backward"></i>
-              <span>الحلقة السابقة</span>
-            </button>
-            <button class="nf-tv-btn" id="episodesListBtn" tabindex="0">
-              <i class="fas fa-list"></i>
-              <span>كل الحلقات</span>
-            </button>
-            <button class="nf-tv-btn nf-tv-btn-primary" id="nextEpBtn" tabindex="0">
-              <span>الحلقة التالية</span>
-              <i class="fas fa-step-forward"></i>
-            </button>
-          </div>
-        ` : ''}
       </div>
     `;
 
     const frame = document.getElementById('nfFrame');
     const loader = document.getElementById('nfLoader');
-    const topBar = document.getElementById('nfTop');
-
-    // Hide back/top controls for first 15s after entering selected server
-    setTimeout(() => {
-      if (topBar) {
-        topBar.style.display = '';
-        topBar.style.visibility = 'visible';
-        topBar.style.opacity = '1';
-        topBar.style.pointerEvents = 'auto';
-      }
-      const playerRoot = document.getElementById('nfPlayer');
-      if (playerRoot) playerRoot.classList.remove('top-hidden');
-    }, 15000);
-
-    const showPlayAssist = () => {
-      if (!wrapper.querySelector('#nfPlayAssistBtn')) {
-        const btn = document.createElement('button');
-        btn.id = 'nfPlayAssistBtn';
-        btn.className = 'nf-tv-btn nf-tv-btn-primary';
-        btn.style.position = 'absolute';
-        btn.style.left = '50%';
-        btn.style.bottom = '24px';
-        btn.style.transform = 'translateX(-50%)';
-        btn.style.zIndex = '20';
-        btn.style.padding = '10px 18px';
-        btn.innerHTML = '<i class="fas fa-play"></i> تشغيل الآن';
-        btn.addEventListener('click', () => {
-          try { frame.focus(); } catch {}
-          btn.remove();
-        });
-        wrapper.appendChild(btn);
-      }
-    };
 
     frame.addEventListener('load', () => {
       setTimeout(() => loader?.classList.add('hidden'), 800);
-
-      // Best-effort autoplay kick (cannot control cross-origin iframe internals)
       try { frame.focus(); } catch {}
-
-      // If external player still blocks autoplay, show quick fallback button
-      setTimeout(() => {
-        if (document.getElementById('nfLoader') && !document.getElementById('nfLoader').classList.contains('hidden')) return;
-        showPlayAssist();
-      }, 1500);
     });
     setTimeout(() => loader?.classList.add('hidden'), 6000);
 
-    if (this.currentType === 'tv') {
-      document.getElementById('prevEpBtn')?.addEventListener('click', () => this.goToPrevEpisode());
-      document.getElementById('nextEpBtn')?.addEventListener('click', () => this.goToNextEpisode());
-      document.getElementById('episodesListBtn')?.addEventListener('click', () => {
-        window.location.href = `watch.html?id=${this.currentId}&type=tv`;
-      });
-    }
-
     this.attachKeyboardShortcuts();
-    this.setupAutoHide();
   },
 
   goToPrevEpisode() {
@@ -429,22 +334,6 @@ const Player = {
         if (e.key === 'p' || e.key === 'P') this.goToPrevEpisode();
       }
     });
-  },
-
-  setupAutoHide() {
-    const player = document.getElementById('nfPlayer');
-    if (!player) return;
-    let hideTimer;
-    const show = () => {
-      player.classList.remove('idle');
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => player.classList.add('idle'), 4000);
-    };
-    player.addEventListener('mousemove', show);
-    player.addEventListener('mousedown', show);
-    player.addEventListener('touchstart', show);
-    player.addEventListener('keydown', show);
-    show();
   },
 
   showError(msg) {
