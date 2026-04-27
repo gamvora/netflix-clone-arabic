@@ -12,12 +12,13 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'moviesapi',
-    name: 'MoviesAPI',
+    id: 'vidjoy',
+    name: 'Vidjoy',
     nameAr: 'السيرفر 2',
-    // moviesapi.club — direct iframe player, accepts TMDB id, opens video immediately (no search, no new tab)
-    movieUrl: (id) => `https://moviesapi.club/movie/${id}`,
-    tvUrl: (id, s, e) => `https://moviesapi.club/tv/${id}-${s}-${e}`
+    host: 'vidjoy.pro',
+    // vidjoy.pro — direct iframe player, distinct UI from Videasy, accepts TMDB id
+    movieUrl: (id) => `https://vidjoy.pro/embed/movie/${id}?autoplay=true&lang=ar&sub=ar`,
+    tvUrl: (id, s, e) => `https://vidjoy.pro/embed/tv/${id}/${s}/${e}?autoplay=true&lang=ar&sub=ar`
   }
 ];
 
@@ -255,11 +256,18 @@ const Player = {
     const currentServer = this.getServer(this.currentServerId);
 
     // Embeddable server (iframe) — opens video directly
+    const hostLabel = currentServer.host || new URL(streamUrl).hostname;
     wrapper.innerHTML = `
       <div class="nf-player video-only" id="nfPlayer">
         <div class="nf-loader" id="nfLoader">
           <div class="nf-loader-spin"></div>
           <div class="nf-loader-text">جاري التحميل من ${currentServer.nameAr}...</div>
+        </div>
+
+        <div class="nf-server-indicator" id="nfServerIndicator" title="${hostLabel}">
+          <i class="fas fa-server"></i>
+          <span>${currentServer.nameAr}</span>
+          <small>${hostLabel}</small>
         </div>
 
         <iframe

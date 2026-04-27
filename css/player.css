@@ -289,6 +289,59 @@ body.player-mode .footer {
   padding: 60px;
 }
 
+/* ========== SERVER INDICATOR (visible overlay top-right) ========== */
+.nf-server-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 15;
+  background: linear-gradient(135deg, rgba(229,9,20,0.95), rgba(183,7,16,0.95));
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  opacity: 0.95;
+  animation: serverIndicatorFadeIn 0.5s ease-out;
+}
+.nf-server-indicator i {
+  font-size: 14px;
+  color: #fff;
+}
+.nf-server-indicator span {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.nf-server-indicator small {
+  font-size: 11px;
+  opacity: 0.85;
+  font-weight: 500;
+  border-right: 1px solid rgba(255,255,255,0.35);
+  padding-right: 8px;
+  margin-right: 2px;
+}
+@keyframes serverIndicatorFadeIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 0.95; transform: translateX(0); }
+}
+@media (max-width: 768px) {
+  .nf-server-indicator {
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .nf-server-indicator small { font-size: 10px; }
+}
+
 .nf-loader-inline .nf-loader-spin {
   width: 40px;
   height: 40px;

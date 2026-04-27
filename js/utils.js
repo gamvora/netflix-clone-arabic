@@ -65,7 +65,7 @@ const Utils = {
     try {
       const saved = localStorage.getItem(`netflixServer_${type}_${id}`)
                  || localStorage.getItem('netflixDefaultServer');
-      if (saved === 'videasy' || saved === 'moviesapi') defaultServer = saved;
+      if (saved === 'videasy' || saved === 'vidjoy') defaultServer = saved;
     } catch {}
 
     // Remove existing picker if present
@@ -98,7 +98,7 @@ const Utils = {
             </div>
             <i class="fas fa-chevron-left srv-picker-chev"></i>
           </button>
-          <button class="srv-picker-option ${defaultServer === 'moviesapi' ? 'recommended' : ''}" data-server="moviesapi">
+          <button class="srv-picker-option ${defaultServer === 'vidjoy' ? 'recommended' : ''}" data-server="vidjoy">
             <div class="srv-picker-opt-icon"><i class="fas fa-globe"></i></div>
             <div class="srv-picker-opt-body">
               <div class="srv-picker-opt-title">
