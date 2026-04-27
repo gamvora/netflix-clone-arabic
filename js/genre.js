@@ -127,10 +127,12 @@ const GenrePage = {
     const grid = document.getElementById(gridId);
     if (!grid) return;
     if (!items || items.length === 0) {
-      grid.innerHTML = '';
+      grid.innerHTML = '<p style="padding: 40px; text-align: center; color: var(--text-secondary); grid-column: 1/-1;">لا توجد نتائج لهذا النوع حالياً.</p>';
       return;
     }
     grid.innerHTML = items.map((item, i) => Utils.createPosterCard(item, i)).join('');
+    // IMPORTANT: Attach click listeners so cards open the details modal
+    Utils.attachCardListeners(grid);
   }
 };
 
