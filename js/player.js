@@ -12,12 +12,12 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'vidsrcto',
-    name: 'VidSrc',
+    id: 'moviesapi',
+    name: 'MoviesAPI',
     nameAr: 'السيرفر 2',
-    // vidsrc.to — direct player, accepts TMDB id, Arabic subtitle preference, opens video immediately
-    movieUrl: (id) => `https://vidsrc.to/embed/movie/${id}?ds_lang=ar`,
-    tvUrl: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}?ds_lang=ar`
+    // moviesapi.club — direct iframe player, accepts TMDB id, opens video immediately (no search, no new tab)
+    movieUrl: (id) => `https://moviesapi.club/movie/${id}`,
+    tvUrl: (id, s, e) => `https://moviesapi.club/tv/${id}-${s}-${e}`
   }
 ];
 
