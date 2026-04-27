@@ -14,11 +14,11 @@ const SERVERS = [
   },
   {
     id: 'vidsrccc',
-    name: 'VidSrc CC',
+    name: '111Movies',
     nameAr: 'السيرفر 2',
-    host: 'vidsrc.cc',
-    movieUrl: (id) => `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true&lang=ar&sub=ar`,
-    tvUrl: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}?autoPlay=true&lang=ar&sub=ar`
+    host: '111movies.com',
+    movieUrl: (id) => `https://111movies.com/movie/${id}`,
+    tvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}`
   }
 ];
 
