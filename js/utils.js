@@ -140,10 +140,17 @@ const Utils = {
           localStorage.setItem(`netflixServer_${type}_${id}`, serverId);
           localStorage.setItem('netflixDefaultServer', serverId);
         } catch {}
-        let url = `watch.html?id=${id}&type=${type}&server=${serverId}`;
+
+        // Visual feedback + prevent double click
+        btn.classList.add('recommended');
+        btn.setAttribute('aria-busy', 'true');
+
+        let url = `watch.html?id=${id}&type=${type}&server=${serverId}&autoplay=1`;
         if (type === 'tv' && season) url += `&s=${season}`;
         if (type === 'tv' && episode) url += `&e=${episode}`;
-        window.location.href = url;
+
+        // Immediate navigation to selected server
+        window.location.assign(url);
       });
     });
 
@@ -193,7 +200,16 @@ const Utils = {
     const title = item.title || 'Unknown';
     const progress = Math.min(100, Math.max(2, item.progress || 0));
     const subtitle = item.type === 'tv' && item.season ? `الموسم ${item.season} • الحلقة ${item.episode || 1}` : (item.year || 'فيلم');
-    const watchUrl = item.type === 'tv' ? `watch.html?id=${item.id}&type=tv&s=${item.season || 1}&e=${item.episode || 1}` : `watch.html?id=${item.id}&type=movie`;
+    const preferred = (() => {
+      try {
+        return localStorage.getItem(`netflixServer_${item.type}_${item.id}`) || localStorage.getItem('netflixDefaultServer') || 'videasy';
+      } catch {
+        return 'videasy';
+      }
+    })();
+    const watchUrl = item.type === 'tv'
+      ? `watch.html?id=${item.id}&type=tv&s=${item.season || 1}&e=${item.episode || 1}&server=${preferred}&autoplay=1`
+      : `watch.html?id=${item.id}&type=movie&server=${preferred}&autoplay=1`;
     return `
       <div class="card card-continue" data-id="${item.id}" data-type="${item.type}" tabindex="0" style="animation-delay: ${index * 0.04}s">
         <div class="card-img-wrap continue-img-wrap">

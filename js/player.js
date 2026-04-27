@@ -8,15 +8,15 @@ const SERVERS = [
     id: 'videasy',
     name: 'Videasy',
     nameAr: 'السيرفر 1',
-    movieUrl: (id) => `https://player.videasy.net/movie/${id}?color=e50914&autoplay=true&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar`,
-    tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
+    movieUrl: (id) => `https://player.videasy.net/movie/${id}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar`,
+    tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
     id: 'vidsrc',
     name: 'VidSrc',
     nameAr: 'السيرفر 2',
-    movieUrl: (id) => `https://vidsrc.xyz/embed/movie?tmdb=${id}&ds_lang=ar`,
-    tvUrl: (id, s, e) => `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}&ds_lang=ar`
+    movieUrl: (id) => `https://vidsrc.xyz/embed/movie?tmdb=${id}&ds_lang=ar&autoplay=1&autostart=1`,
+    tvUrl: (id, s, e) => `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}&ds_lang=ar&autoplay=1&autostart=1`
   }
 ];
 
@@ -269,8 +269,8 @@ const Player = {
       : 'index.html';
 
     wrapper.innerHTML = `
-      <div class="nf-player" id="nfPlayer">
-        <div class="nf-top" id="nfTop">
+      <div class="nf-player top-hidden" id="nfPlayer">
+        <div class="nf-top" id="nfTop" style="opacity:0 !important;visibility:hidden !important;pointer-events:none !important;display:none !important;">
           <div class="nf-top-left">
             <a href="${backHref}" class="nf-icon-btn" title="عودة" tabindex="0">
               <i class="fas fa-arrow-right"></i>
@@ -320,8 +320,51 @@ const Player = {
 
     const frame = document.getElementById('nfFrame');
     const loader = document.getElementById('nfLoader');
+    const topBar = document.getElementById('nfTop');
+
+    // Hide back/top controls for first 15s after entering selected server
+    setTimeout(() => {
+      if (topBar) {
+        topBar.style.display = '';
+        topBar.style.visibility = 'visible';
+        topBar.style.opacity = '1';
+        topBar.style.pointerEvents = 'auto';
+      }
+      const playerRoot = document.getElementById('nfPlayer');
+      if (playerRoot) playerRoot.classList.remove('top-hidden');
+    }, 15000);
+
+    const showPlayAssist = () => {
+      if (!wrapper.querySelector('#nfPlayAssistBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'nfPlayAssistBtn';
+        btn.className = 'nf-tv-btn nf-tv-btn-primary';
+        btn.style.position = 'absolute';
+        btn.style.left = '50%';
+        btn.style.bottom = '24px';
+        btn.style.transform = 'translateX(-50%)';
+        btn.style.zIndex = '20';
+        btn.style.padding = '10px 18px';
+        btn.innerHTML = '<i class="fas fa-play"></i> تشغيل الآن';
+        btn.addEventListener('click', () => {
+          try { frame.focus(); } catch {}
+          btn.remove();
+        });
+        wrapper.appendChild(btn);
+      }
+    };
+
     frame.addEventListener('load', () => {
       setTimeout(() => loader?.classList.add('hidden'), 800);
+
+      // Best-effort autoplay kick (cannot control cross-origin iframe internals)
+      try { frame.focus(); } catch {}
+
+      // If external player still blocks autoplay, show quick fallback button
+      setTimeout(() => {
+        if (document.getElementById('nfLoader') && !document.getElementById('nfLoader').classList.contains('hidden')) return;
+        showPlayAssist();
+      }, 1500);
     });
     setTimeout(() => loader?.classList.add('hidden'), 6000);
 

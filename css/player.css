@@ -235,6 +235,14 @@ body.player-mode .footer {
   pointer-events: none;
 }
 
+/* Force-hide top bar for first seconds after player render */
+.nf-player.top-hidden .nf-top {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 .nf-player.idle .nf-tv-bottom {
   transform: translateY(20px);
 }
