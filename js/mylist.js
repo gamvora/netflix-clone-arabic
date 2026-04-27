@@ -1,4 +1,4 @@
-// My List page logic
+// My List page logic - with visible delete button on each card
 
 const MyListPage = {
   async init() {
@@ -29,29 +29,94 @@ const MyListPage = {
     // Fetch all items' details
     const items = await Promise.all(
       list.map(async (entry) => {
-        if (entry.type === 'tv') {
-          return await API.getTVDetails(entry.id);
-        } else {
-          return await API.getMovieDetails(entry.id);
+        try {
+          if (entry.type === 'tv') {
+            return await API.getTVDetails(entry.id);
+          } else {
+            return await API.getMovieDetails(entry.id);
+          }
+        } catch {
+          return null;
         }
       })
     );
     
     const validItems = items.filter(item => item && item.id);
     
-    if (statusEl) statusEl.innerHTML = `<strong>${validItems.length}</strong> عنصر في قائمتك`;
+    if (statusEl) {
+      statusEl.innerHTML = `
+        <span><strong>${validItems.length}</strong> عنصر في قائمتك</span>
+        <button id="clearAllBtn" class="btn-text-danger" title="مسح قائمتي بالكامل">
+          <i class="fas fa-trash-alt"></i> مسح الكل
+        </button>
+      `;
+    }
     
+    this.render(container, validItems);
+    
+    // Clear all button
+    document.getElementById('clearAllBtn')?.addEventListener('click', () => {
+      if (confirm('هل أنت متأكد من مسح كل قائمتي؟ لا يمكن التراجع عن هذه العملية.')) {
+        localStorage.setItem('netflixMyList', '[]');
+        Utils.showToast('تم مسح قائمتي');
+        setTimeout(() => location.reload(), 600);
+      }
+    });
+  },
+
+  render(container, validItems) {
     container.innerHTML = validItems
       .map((item, i) => {
-        // Ensure media_type is set for the card
         if (!item.media_type) {
           item.media_type = item.first_air_date ? 'tv' : 'movie';
         }
-        return Utils.createCard(item, i);
+        const cardHtml = Utils.createCard(item, i);
+        // Wrap with a remove-overlay button so deletion is visible & one-click
+        return `
+          <div class="mylist-item-wrap" data-id="${item.id}" data-type="${item.media_type}">
+            ${cardHtml}
+            <button class="mylist-remove" title="حذف من قائمتي" aria-label="حذف من قائمتي">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
       })
       .join('');
-    
+
+    // Attach standard card click handlers (open modal on card click)
     Utils.attachCardListeners(container);
+
+    // Attach remove button handlers (stop propagation so modal doesn't open)
+    container.querySelectorAll('.mylist-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const wrap = btn.closest('.mylist-item-wrap');
+        if (!wrap) return;
+        const id = wrap.dataset.id;
+        const type = wrap.dataset.type;
+
+        // Animate out
+        wrap.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+        wrap.style.transform = 'scale(0.7)';
+        wrap.style.opacity = '0';
+
+        setTimeout(() => {
+          Utils.removeFromMyList(id, type);
+          Utils.showToast('تمت إزالة العنصر من قائمتي');
+          wrap.remove();
+          // Update count
+          const remaining = container.querySelectorAll('.mylist-item-wrap').length;
+          const statusEl = document.getElementById('listStatus');
+          if (remaining === 0) {
+            location.reload();
+          } else if (statusEl) {
+            const strong = statusEl.querySelector('strong');
+            if (strong) strong.textContent = remaining;
+          }
+        }, 260);
+      });
+    });
   }
 };
 
