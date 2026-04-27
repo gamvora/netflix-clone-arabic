@@ -138,11 +138,9 @@
 
       // ENTER / OK = click focused element
       if (key === 'Enter' && active && active !== document.body && !isTyping) {
-        // Let native Enter work for links and buttons; only synthesize for other focusable elements
-        if (active.tagName !== 'A' && active.tagName !== 'BUTTON' && active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          active.click();
-        }
+        e.preventDefault();
+        // Always trigger click for TV remote consistency (including buttons in modals/server picker)
+        try { active.click(); } catch (_) {}
         return;
       }
 
@@ -206,14 +204,18 @@
       const isArrow = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key);
       if (!isArrow) return;
 
-      // Skip if focus is inside a horizontal scroll row and we're using left/right: allow native scroll
-      // BUT we still do spatial nav to next card in that row, which is what the user wants
+      // If a modal/sheet is open, keep navigation trapped inside it
+      const activeLayer =
+        document.querySelector('.srv-picker-modal') ||
+        document.querySelector('.trailer-modal.active') ||
+        document.querySelector('.modal.active') ||
+        document.querySelector('.modal-overlay.active');
 
       e.preventDefault();
-      this.moveFocus(key);
+      this.moveFocus(key, activeLayer || null);
     },
 
-    moveFocus(direction) {
+    moveFocus(direction, scopeEl = null) {
       const current = document.activeElement;
       if (!current || current === document.body) {
         this.focusInitial();
@@ -226,7 +228,8 @@
         return;
       }
 
-      const candidates = Array.from(document.querySelectorAll(this.FOCUSABLE))
+      const root = scopeEl || document;
+      const candidates = Array.from(root.querySelectorAll(this.FOCUSABLE))
         .filter(el => el !== current && this.isVisible(el));
 
       let bestCandidate = null;
