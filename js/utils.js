@@ -46,6 +46,11 @@ const Utils = {
   },
   getMediaType(item) { return item.media_type || (item.first_air_date ? 'tv' : 'movie'); },
 
+  getQueryParam(name) {
+    try { return new URLSearchParams(window.location.search).get(name) || ''; }
+    catch { return ''; }
+  },
+
   createCard(item, index = 0) {
     const poster = this.getImage(item.poster_path, 'w500');
     const title = this.getTitle(item);
@@ -181,6 +186,39 @@ const Utils = {
       if (leftBtn) leftBtn.addEventListener('click', () => content.scrollBy({ left: -content.offsetWidth * 0.85, behavior: 'smooth' }));
       if (rightBtn) rightBtn.addEventListener('click', () => content.scrollBy({ left: content.offsetWidth * 0.85, behavior: 'smooth' }));
     });
+    // Always reveal rows (required because CSS hides rows with opacity:0 until .visible class added)
+    this.setupScrollReveal();
+  },
+
+  setupScrollReveal() {
+    const rows = document.querySelectorAll('.row');
+    if (!rows.length) return;
+    // If IntersectionObserver unsupported, reveal all immediately
+    if (!('IntersectionObserver' in window)) {
+      rows.forEach(r => r.classList.add('visible'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '100px 0px' });
+    rows.forEach(row => {
+      // If row is already in/near viewport at load, reveal immediately
+      const rect = row.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 300) {
+        row.classList.add('visible');
+      } else {
+        observer.observe(row);
+      }
+    });
+    // Safety net: force-reveal any remaining hidden rows after 2s
+    setTimeout(() => {
+      rows.forEach(r => r.classList.add('visible'));
+    }, 2000);
   },
 
   highlightRow(rowId, scrollTo = true) {
