@@ -508,24 +508,41 @@ img { max-width: 100%; display: block; }
 
 .hero-indicators {
   position: absolute;
-  bottom: 220px;
-  right: 60px;
+  right: clamp(14px, 4vw, 60px);
+  bottom: max(24px, calc(env(safe-area-inset-bottom, 0px) + 20px));
   display: flex;
-  gap: 6px;
-  z-index: 3;
+  align-items: center;
+  gap: clamp(6px, 0.8vw, 10px);
+  z-index: 4;
+  max-width: min(92vw, 520px);
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.28), rgba(0,0,0,0.12));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .indicator {
-  width: 30px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.25);
+  width: clamp(18px, 2.2vw, 30px);
+  height: clamp(3px, 0.45vw, 4px);
+  background: rgba(255, 255, 255, 0.35);
   cursor: pointer;
-  transition: var(--transition);
-  border-radius: 2px;
+  transition: width 0.22s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  min-width: 16px;
 }
 
-.indicator:hover { background: rgba(255, 255, 255, 0.5); }
-.indicator.active { background: var(--netflix-red); width: 50px; }
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.indicator.active {
+  background: linear-gradient(90deg, #ff2a36, var(--netflix-red));
+  width: clamp(28px, 4vw, 50px);
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.55);
+}
 
 /* ============================================
    BUTTONS
@@ -1629,7 +1646,8 @@ body.tv-nav-ready .sim-card:focus-visible {
   box-shadow: 0 0 0 4px #e50914, 0 8px 30px rgba(229, 9, 20, 0.6);
   transform: scale(1.08);
   z-index: 20;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  will-change: transform, box-shadow;
 }
 
 /* Nav links focus */
@@ -1711,10 +1729,11 @@ body.tv-nav-ready .nf-episodes-list {
   overflow: visible;
 }
 
-/* But keep horizontal scroll working */
+/* Keep horizontal scroll working while preventing vertical clipping */
 body.tv-nav-ready .row-content {
   overflow-x: auto;
   overflow-y: visible;
+  scroll-snap-type: x proximity;
 }
 
 /* Smooth transitions for focus */

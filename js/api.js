@@ -110,6 +110,34 @@ const API = {
     return this.fetchBilingual(ENDPOINTS[category], pages);
   },
 
+  // Remove duplicates across multiple rows globally
+  // Input: [{ key: 'trending', items: [...] }, ...]
+  // Output: { trending: [...], topRatedMovies: [...], ... } with no repeated media across rows
+  allocateUniqueRows(rowDefs, perRowLimit = 28) {
+    const seen = new Set();
+    const out = {};
+
+    rowDefs.forEach(def => {
+      const key = def.key;
+      const items = Array.isArray(def.items) ? def.items : [];
+      const unique = [];
+
+      for (const item of items) {
+        if (!item || !item.id) continue;
+        const media = item.media_type || (item.title ? 'movie' : 'tv');
+        const uid = `${media}_${item.id}`;
+        if (seen.has(uid)) continue;
+        seen.add(uid);
+        unique.push(item);
+        if (unique.length >= perRowLimit) break;
+      }
+
+      out[key] = unique;
+    });
+
+    return out;
+  },
+
   // Fetch both movies + TV shows for a given genre key (used by genre.html)
   async getGenreContent(genreKey, pages = 3) {
     const genre = (typeof GENRE_MAP !== 'undefined') ? GENRE_MAP[genreKey] : null;
@@ -248,44 +276,57 @@ const API = {
       animationMovies,
       koreanTV,
       animeTV,
+      arabicMovies,
+      arabicTV,
+      asianMovies,
+      asianTV,
       upcomingMovies,
       nowPlayingMovies
     ] = await Promise.all([
       this.getTrending(),
       this.getTrendingDay(),
       this.getNetflixOriginals(),
-      this.getMoviesByCategory('topRatedMovies'),
-      this.getMoviesByCategory('actionMovies'),
-      this.getMoviesByCategory('comedyMovies'),
-      this.getMoviesByCategory('horrorMovies'),
-      this.getMoviesByCategory('romanceMovies'),
-      this.getMoviesByCategory('documentaries'),
-      this.getMoviesByCategory('popularTV'),
-      this.getMoviesByCategory('scienceFictionMovies'),
-      this.getMoviesByCategory('animationMovies'),
-      this.getMoviesByCategory('koreanTV'),
-      this.getMoviesByCategory('animeTV'),
-      this.getMoviesByCategory('upcomingMovies'),
-      this.getMoviesByCategory('nowPlayingMovies')
+      this.getMoviesByCategory('topRatedMovies', 4),
+      this.getMoviesByCategory('actionMovies', 4),
+      this.getMoviesByCategory('comedyMovies', 4),
+      this.getMoviesByCategory('horrorMovies', 3),
+      this.getMoviesByCategory('romanceMovies', 3),
+      this.getMoviesByCategory('documentaries', 3),
+      this.getMoviesByCategory('popularTV', 4),
+      this.getMoviesByCategory('scienceFictionMovies', 3),
+      this.getMoviesByCategory('animationMovies', 3),
+      this.getMoviesByCategory('koreanTV', 4),
+      this.getMoviesByCategory('animeTV', 4),
+      this.getMoviesByCategory('arabicMovies', 4),
+      this.getMoviesByCategory('arabicTV', 4),
+      this.getMoviesByCategory('asianMovies', 4),
+      this.getMoviesByCategory('asianTV', 4),
+      this.getMoviesByCategory('upcomingMovies', 4),
+      this.getMoviesByCategory('nowPlayingMovies', 4)
     ]);
 
-    return {
-      trending,
-      trendingDay,
-      netflixOriginals,
-      topRatedMovies,
-      actionMovies,
-      comedyMovies,
-      horrorMovies,
-      romanceMovies,
-      documentaries,
-      popularTV,
-      scienceFictionMovies,
-      animationMovies,
-      koreanTV,
-      animeTV,
-      upcomingMovies,
-      nowPlayingMovies
-    };
+    // Prevent duplicates across homepage rows
+    return this.allocateUniqueRows([
+      { key: 'trending', items: trending },
+      { key: 'trendingDay', items: trendingDay },
+      { key: 'netflixOriginals', items: netflixOriginals },
+      { key: 'topRatedMovies', items: topRatedMovies },
+      { key: 'nowPlayingMovies', items: nowPlayingMovies },
+      { key: 'upcomingMovies', items: upcomingMovies },
+      { key: 'actionMovies', items: actionMovies },
+      { key: 'comedyMovies', items: comedyMovies },
+      { key: 'scienceFictionMovies', items: scienceFictionMovies },
+      { key: 'horrorMovies', items: horrorMovies },
+      { key: 'romanceMovies', items: romanceMovies },
+      { key: 'popularTV', items: popularTV },
+      { key: 'arabicMovies', items: arabicMovies },
+      { key: 'arabicTV', items: arabicTV },
+      { key: 'asianMovies', items: asianMovies },
+      { key: 'asianTV', items: asianTV },
+      { key: 'koreanTV', items: koreanTV },
+      { key: 'animeTV', items: animeTV },
+      { key: 'animationMovies', items: animationMovies },
+      { key: 'documentaries', items: documentaries }
+    ], 28);
   }
 };

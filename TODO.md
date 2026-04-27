@@ -34,3 +34,32 @@
 - [ ] Review for CSS regressions
 - [ ] Update cache version if needed
 - [ ] Final pass summary
+
+## 6) New Comprehensive Pass (Requested)
+- [x] User requested: comprehensive improvement + TV usability
+- [ ] Improve TV focus visuals and keyboard clarity
+- [ ] Improve dynamic focus reliability in carousels/modals
+- [ ] Optimize performance hotspots (event handlers / focus scans)
+- [ ] Re-test key flow after improvements
+
+## 7) New Task: Expand Arabic + Asian Content
+- [x] Plan approved
+- [ ] Update `js/config.js` with `arabicMovies`, `asianMovies`, `asianTV` endpoints
+- [ ] Update `js/api.js` homepage payload with new categories
+- [ ] Update `index.html` with Arabic + Asian homepage rows
+- [ ] Update `js/main.js` to render new homepage rows
+- [ ] Update `movies.html` rows (Arabic movies + Asian movies)
+- [ ] Update `js/movies.js` fetch/render for new movie rows
+- [ ] Update `tvshows.html` rows (Asian series)
+- [ ] Update `js/tvshows.js` fetch/render for new tv rows
+- [ ] Run syntax checks for updated JS files
+- [ ] Quick browser verification
+- [ ] Commit and push to GitHub
+
+## 8) New Task: Hero Indicator Responsive Fix
+- [x] Plan approved
+- [x] Review current `.hero-indicators` and `.indicator` styles
+- [x] Improve indicator sizing/spacing for desktop/tablet/mobile
+- [x] Ensure active indicator remains clear on all screen sizes
+- [x] Validate no overlap with hero controls/menu
+- [ ] Final visual QA

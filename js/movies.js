@@ -5,26 +5,48 @@ const MoviesPage = {
     Utils.setupNavbar();
     Utils.setupModals();
     
-    const [popular, topRated, nowPlaying, upcoming, action, comedy, horror, romance, scifi, animation, thriller, crime, fantasy, adventure, family] = await Promise.all([
-      API.getMoviesByCategory('popularMovies'),
-      API.getMoviesByCategory('topRatedMovies'),
-      API.getMoviesByCategory('nowPlayingMovies'),
-      API.getMoviesByCategory('upcomingMovies'),
-      API.getMoviesByCategory('actionMovies'),
-      API.getMoviesByCategory('comedyMovies'),
-      API.getMoviesByCategory('horrorMovies'),
-      API.getMoviesByCategory('romanceMovies'),
-      API.getMoviesByCategory('scienceFictionMovies'),
-      API.getMoviesByCategory('animationMovies'),
-      API.getMoviesByCategory('thrillerMovies'),
-      API.getMoviesByCategory('crimeMovies'),
-      API.getMoviesByCategory('fantasyMovies'),
-      API.getMoviesByCategory('adventureMovies'),
-      API.getMoviesByCategory('familyMovies')
+    const [popular, topRated, nowPlaying, upcoming, action, comedy, horror, romance, scifi, animation, thriller, crime, fantasy, adventure, family, arabicMovies, asianMovies] = await Promise.all([
+      API.getMoviesByCategory('popularMovies', 4),
+      API.getMoviesByCategory('topRatedMovies', 4),
+      API.getMoviesByCategory('nowPlayingMovies', 4),
+      API.getMoviesByCategory('upcomingMovies', 4),
+      API.getMoviesByCategory('actionMovies', 4),
+      API.getMoviesByCategory('comedyMovies', 4),
+      API.getMoviesByCategory('horrorMovies', 3),
+      API.getMoviesByCategory('romanceMovies', 3),
+      API.getMoviesByCategory('scienceFictionMovies', 3),
+      API.getMoviesByCategory('animationMovies', 3),
+      API.getMoviesByCategory('thrillerMovies', 3),
+      API.getMoviesByCategory('crimeMovies', 3),
+      API.getMoviesByCategory('fantasyMovies', 3),
+      API.getMoviesByCategory('adventureMovies', 3),
+      API.getMoviesByCategory('familyMovies', 3),
+      API.getMoviesByCategory('arabicMovies', 4),
+      API.getMoviesByCategory('asianMovies', 4)
     ]);
+
+    const rows = API.allocateUniqueRows([
+      { key: 'popular', items: popular },
+      { key: 'topRated', items: topRated },
+      { key: 'nowPlaying', items: nowPlaying },
+      { key: 'upcoming', items: upcoming },
+      { key: 'action', items: action },
+      { key: 'comedy', items: comedy },
+      { key: 'scifi', items: scifi },
+      { key: 'horror', items: horror },
+      { key: 'romance', items: romance },
+      { key: 'animation', items: animation },
+      { key: 'thriller', items: thriller },
+      { key: 'crime', items: crime },
+      { key: 'fantasy', items: fantasy },
+      { key: 'adventure', items: adventure },
+      { key: 'family', items: family },
+      { key: 'arabicMovies', items: arabicMovies },
+      { key: 'asianMovies', items: asianMovies }
+    ], 28);
     
     // Set featured hero
-    const featured = popular[0] || nowPlaying[0] || topRated[0];
+    const featured = rows.popular?.[0] || rows.nowPlaying?.[0] || rows.topRated?.[0];
     if (featured) {
       const hero = document.getElementById('pageHero');
       if (hero) {
@@ -57,21 +79,23 @@ const MoviesPage = {
       }
     }
     
-    Utils.renderRow('row-popular', popular);
-    Utils.renderRow('row-top-rated', topRated);
-    Utils.renderRow('row-now-playing', nowPlaying);
-    Utils.renderRow('row-upcoming', upcoming);
-    Utils.renderRow('row-action', action);
-    Utils.renderRow('row-comedy', comedy);
-    Utils.renderRow('row-scifi', scifi);
-    Utils.renderRow('row-horror', horror);
-    Utils.renderRow('row-romance', romance);
-    Utils.renderRow('row-animation', animation);
-    Utils.renderRow('row-thriller', thriller);
-    Utils.renderRow('row-crime', crime);
-    Utils.renderRow('row-fantasy', fantasy);
-    Utils.renderRow('row-adventure', adventure);
-    Utils.renderRow('row-family', family);
+    Utils.renderRow('row-popular', rows.popular || []);
+    Utils.renderRow('row-top-rated', rows.topRated || []);
+    Utils.renderRow('row-now-playing', rows.nowPlaying || []);
+    Utils.renderRow('row-upcoming', rows.upcoming || []);
+    Utils.renderRow('row-action', rows.action || []);
+    Utils.renderRow('row-comedy', rows.comedy || []);
+    Utils.renderRow('row-scifi', rows.scifi || []);
+    Utils.renderRow('row-horror', rows.horror || []);
+    Utils.renderRow('row-romance', rows.romance || []);
+    Utils.renderRow('row-animation', rows.animation || []);
+    Utils.renderRow('row-thriller', rows.thriller || []);
+    Utils.renderRow('row-crime', rows.crime || []);
+    Utils.renderRow('row-fantasy', rows.fantasy || []);
+    Utils.renderRow('row-adventure', rows.adventure || []);
+    Utils.renderRow('row-family', rows.family || []);
+    Utils.renderRow('row-arabic', rows.arabicMovies || []);
+    Utils.renderRow('row-asian', rows.asianMovies || []);
     
     Utils.setupCarouselScroll();
     
@@ -84,7 +108,8 @@ const MoviesPage = {
         romance: 'row-romance', scifi: 'row-scifi', animation: 'row-animation',
         thriller: 'row-thriller', crime: 'row-crime', fantasy: 'row-fantasy',
         adventure: 'row-adventure', family: 'row-family', popular: 'row-popular',
-        'top-rated': 'row-top-rated', upcoming: 'row-upcoming'
+        'top-rated': 'row-top-rated', upcoming: 'row-upcoming',
+        arabic: 'row-arabic', asian: 'row-asian'
       };
       const rowId = rowMap[genre.toLowerCase()];
       if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);

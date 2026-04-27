@@ -42,6 +42,10 @@ const Main = {
     Utils.renderRow('row-horror', data.horrorMovies);
     Utils.renderRow('row-romance', data.romanceMovies);
     Utils.renderRow('row-tv', data.popularTV);
+    Utils.renderRow('row-arabic-movies', data.arabicMovies);
+    Utils.renderRow('row-arabic-tv', data.arabicTV);
+    Utils.renderRow('row-asian-movies', data.asianMovies);
+    Utils.renderRow('row-asian-tv', data.asianTV);
     Utils.renderRow('row-korean', data.koreanTV);
     Utils.renderRow('row-anime', data.animeTV);
     Utils.renderRow('row-animation', data.animationMovies);

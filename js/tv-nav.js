@@ -101,15 +101,24 @@
     },
 
     observeChanges() {
-      const observer = new MutationObserver((mutations) => {
-        let needsRescan = false;
-        mutations.forEach(m => {
-          if (m.addedNodes.length > 0) needsRescan = true;
-        });
-        if (needsRescan) {
+      let rafId = null;
+      const scheduleFocusableScan = () => {
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
           this.makeElementsFocusable();
+        });
+      };
+
+      const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.addedNodes && m.addedNodes.length > 0) {
+            scheduleFocusableScan();
+            break;
+          }
         }
       });
+
       observer.observe(document.body, { childList: true, subtree: true });
     },
 

@@ -15,6 +15,7 @@
   const LS_PROFILES = 'netflixy_profiles';
   const LS_ACTIVE = 'netflixy_active_profile';
   const LS_INTRO_SEEN = 'netflixy_intro_seen';
+  const SS_PROFILE_GATE_DONE = 'netflixy_profile_gate_done';
 
   function getProfiles() {
     try {
@@ -39,13 +40,26 @@
   }
 
   function redirectToIntroOrProfiles() {
+    // Show intro + profile picker ONLY once per fresh site entry/session.
+    // After selecting a profile, internal navigation should NOT return to profiles.
+    const gateDone = sessionStorage.getItem(SS_PROFILE_GATE_DONE) === '1';
     const introSeen = localStorage.getItem(LS_INTRO_SEEN) === '1';
     const next = encodeURIComponent(currentPath());
-    if (!introSeen) {
-      window.location.replace('intro.html?next=' + encodeURIComponent('profiles.html'));
-    } else {
-      window.location.replace('profiles.html?next=' + next);
+
+    if (!gateDone) {
+      if (!introSeen) {
+        // First ever entry: intro first, then profiles.
+        window.location.replace('intro.html?next=' + encodeURIComponent('profiles.html?next=' + next));
+      } else {
+        // Intro already seen in lifetime: go straight to profiles once this session.
+        window.location.replace('profiles.html?next=' + next);
+      }
+      return;
     }
+
+    // If gate already passed in this session but active profile missing (e.g. sign-out),
+    // return to profiles only (no intro replay).
+    window.location.replace('profiles.html?next=' + next);
   }
 
   function enforceProfile() {
@@ -54,6 +68,10 @@
       redirectToIntroOrProfiles();
       return false;
     }
+
+    // Once profile exists, mark profile gate as completed for current tab/session.
+    try { sessionStorage.setItem(SS_PROFILE_GATE_DONE, '1'); } catch (_) {}
+
     return true;
   }
 

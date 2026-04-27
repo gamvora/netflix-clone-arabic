@@ -5,23 +5,41 @@ const TVPage = {
     Utils.setupNavbar();
     Utils.setupModals();
     
-    const [popular, topRated, onAir, airingToday, netflixOriginals, actionTV, comedyTV, dramaTV, crimeTV, sciFiTV, koreanTV, animeTV, arabicTV] = await Promise.all([
-      API.getMoviesByCategory('popularTV'),
-      API.getMoviesByCategory('topRatedTV'),
-      API.getMoviesByCategory('onAirTV'),
-      API.getMoviesByCategory('airingTodayTV'),
+    const [popular, topRated, onAir, airingToday, netflixOriginals, actionTV, comedyTV, dramaTV, crimeTV, sciFiTV, koreanTV, animeTV, arabicTV, asianTV] = await Promise.all([
+      API.getMoviesByCategory('popularTV', 4),
+      API.getMoviesByCategory('topRatedTV', 4),
+      API.getMoviesByCategory('onAirTV', 4),
+      API.getMoviesByCategory('airingTodayTV', 4),
       API.getNetflixOriginals(),
-      API.getMoviesByCategory('actionTV'),
-      API.getMoviesByCategory('comedyTV'),
-      API.getMoviesByCategory('dramaTV'),
-      API.getMoviesByCategory('crimeTV'),
-      API.getMoviesByCategory('sciFiTV'),
-      API.getMoviesByCategory('koreanTV'),
-      API.getMoviesByCategory('animeTV'),
-      API.getMoviesByCategory('arabicTV')
+      API.getMoviesByCategory('actionTV', 4),
+      API.getMoviesByCategory('comedyTV', 4),
+      API.getMoviesByCategory('dramaTV', 4),
+      API.getMoviesByCategory('crimeTV', 4),
+      API.getMoviesByCategory('sciFiTV', 4),
+      API.getMoviesByCategory('koreanTV', 4),
+      API.getMoviesByCategory('animeTV', 4),
+      API.getMoviesByCategory('arabicTV', 4),
+      API.getMoviesByCategory('asianTV', 4)
     ]);
+
+    const rows = API.allocateUniqueRows([
+      { key: 'netflixOriginals', items: netflixOriginals },
+      { key: 'popular', items: popular },
+      { key: 'topRated', items: topRated },
+      { key: 'onAir', items: onAir },
+      { key: 'airingToday', items: airingToday },
+      { key: 'actionTV', items: actionTV },
+      { key: 'dramaTV', items: dramaTV },
+      { key: 'comedyTV', items: comedyTV },
+      { key: 'crimeTV', items: crimeTV },
+      { key: 'sciFiTV', items: sciFiTV },
+      { key: 'koreanTV', items: koreanTV },
+      { key: 'animeTV', items: animeTV },
+      { key: 'arabicTV', items: arabicTV },
+      { key: 'asianTV', items: asianTV }
+    ], 28);
     
-    const featured = netflixOriginals[0] || popular[0];
+    const featured = rows.netflixOriginals?.[0] || rows.popular?.[0];
     if (featured) {
       const hero = document.getElementById('pageHero');
       if (hero) {
@@ -54,19 +72,20 @@ const TVPage = {
       }
     }
     
-    Utils.renderRow('row-netflix', netflixOriginals, { posterStyle: true });
-    Utils.renderRow('row-popular', popular);
-    Utils.renderRow('row-top-rated', topRated);
-    Utils.renderRow('row-on-air', onAir);
-    Utils.renderRow('row-airing-today', airingToday);
-    Utils.renderRow('row-action', actionTV);
-    Utils.renderRow('row-drama', dramaTV);
-    Utils.renderRow('row-comedy', comedyTV);
-    Utils.renderRow('row-crime', crimeTV);
-    Utils.renderRow('row-scifi', sciFiTV);
-    Utils.renderRow('row-korean', koreanTV);
-    Utils.renderRow('row-anime', animeTV);
-    Utils.renderRow('row-arabic', arabicTV);
+    Utils.renderRow('row-netflix', rows.netflixOriginals || [], { posterStyle: true });
+    Utils.renderRow('row-popular', rows.popular || []);
+    Utils.renderRow('row-top-rated', rows.topRated || []);
+    Utils.renderRow('row-on-air', rows.onAir || []);
+    Utils.renderRow('row-airing-today', rows.airingToday || []);
+    Utils.renderRow('row-action', rows.actionTV || []);
+    Utils.renderRow('row-drama', rows.dramaTV || []);
+    Utils.renderRow('row-comedy', rows.comedyTV || []);
+    Utils.renderRow('row-crime', rows.crimeTV || []);
+    Utils.renderRow('row-scifi', rows.sciFiTV || []);
+    Utils.renderRow('row-korean', rows.koreanTV || []);
+    Utils.renderRow('row-anime', rows.animeTV || []);
+    Utils.renderRow('row-arabic', rows.arabicTV || []);
+    Utils.renderRow('row-asian', rows.asianTV || []);
     
     Utils.setupCarouselScroll();
     
@@ -78,7 +97,7 @@ const TVPage = {
         netflix: 'row-netflix', popular: 'row-popular', 'top-rated': 'row-top-rated',
         'on-air': 'row-on-air', action: 'row-action', drama: 'row-drama',
         comedy: 'row-comedy', crime: 'row-crime', scifi: 'row-scifi',
-        korean: 'row-korean', anime: 'row-anime', arabic: 'row-arabic'
+        korean: 'row-korean', anime: 'row-anime', arabic: 'row-arabic', asian: 'row-asian'
       };
       const rowId = rowMap[genre.toLowerCase()];
       if (rowId) setTimeout(() => Utils.highlightRow(rowId, true), 500);
