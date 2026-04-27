@@ -93,10 +93,28 @@
     padding: 12px 0;
     border-bottom: 1px solid var(--border);
     display: block;
+    width: 100%;
   }
   
   .nav-links li:last-child a {
     border-bottom: none;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  /* Keep mobile nav scrollable for long menus */
+  .nav-links.active {
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide hero indicators on mobile to avoid overlapping menu */
+  .nav-links.active ~ .hero .hero-indicators,
+  body:has(.nav-links.active) .hero-indicators {
+    display: none;
   }
   
   .menu-toggle { display: block; }
@@ -147,7 +165,7 @@
   .btn i { font-size: 18px; }
   
   .hero-indicators {
-    bottom: 180px;
+    bottom: 140px;
     right: 5%;
   }
   

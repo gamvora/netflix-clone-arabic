@@ -399,17 +399,51 @@ const Utils = {
     const toggle = document.querySelector('.menu-toggle');
     const links = document.querySelector('.nav-links');
     if (toggle && links) {
-      toggle.addEventListener('click', () => links.classList.toggle('open'));
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        links.classList.toggle('active');
+        const icon = toggle.querySelector('i');
+        if (icon) icon.className = links.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+      });
+      // Close mobile menu when a link is tapped (not the dropdown toggle)
+      links.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', (e) => {
+          if (a.classList.contains('nav-dropdown-toggle')) return;
+          if (window.innerWidth <= 768) {
+            links.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            if (icon) icon.className = 'fas fa-bars';
+          }
+        });
+      });
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 &&
+            links.classList.contains('active') &&
+            !links.contains(e.target) &&
+            !toggle.contains(e.target)) {
+          links.classList.remove('active');
+          const icon = toggle.querySelector('i');
+          if (icon) icon.className = 'fas fa-bars';
+        }
+      });
     }
-    // Dropdown click handler for mobile/TV
+    // Dropdown click handler (mobile/TV + accessibility)
     document.querySelectorAll('.nav-dropdown').forEach(dd => {
       const t = dd.querySelector('.nav-dropdown-toggle');
       if (!t) return;
       t.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        // Close other open dropdowns
+        document.querySelectorAll('.nav-dropdown.open').forEach(other => {
+          if (other !== dd) other.classList.remove('open');
+        });
         dd.classList.toggle('open');
       });
-      document.addEventListener('click', (e) => {
+    });
+    document.addEventListener('click', (e) => {
+      document.querySelectorAll('.nav-dropdown.open').forEach(dd => {
         if (!dd.contains(e.target)) dd.classList.remove('open');
       });
     });
