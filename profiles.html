@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>من يشاهد الآن؟ - NETFLIXY</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914' font-weight='900' font-family='Arial Black'>N</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/profiles.css?v=177">
+</head>
+<body>
+
+  <!-- Brand logo at top -->
+  <header class="profiles-header">
+    <a href="profiles.html" class="brand-logo">
+      NETFLIX<span>Y</span>
+    </a>
+  </header>
+
+  <!-- Main container -->
+  <main class="profiles-main" id="profilesMain">
+
+    <!-- === SELECTION VIEW === -->
+    <section class="view selection-view" id="selectionView">
+      <h1 class="view-title" id="viewTitle">من يشاهد الآن؟</h1>
+
+      <div class="profiles-grid" id="profilesGrid">
+        <!-- profiles render here -->
+      </div>
+
+      <button class="manage-btn" id="manageBtn" type="button">
+        <i class="fas fa-pencil-alt"></i>
+        <span>إدارة البروفايلات</span>
+      </button>
+    </section>
+
+    <!-- === PIN VIEW === -->
+    <section class="view pin-view" id="pinView" hidden>
+      <div class="pin-header">
+        <img id="pinAvatar" class="pin-avatar" src="" alt="">
+        <h2 class="pin-title">الرجاء إدخال كلمة المرور</h2>
+        <p class="pin-subtitle" id="pinSubtitle"></p>
+      </div>
+
+      <div class="pin-inputs" id="pinInputs">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-idx="0" autocomplete="off">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-idx="1" autocomplete="off">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-idx="2" autocomplete="off">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-idx="3" autocomplete="off">
+      </div>
+
+      <div class="pin-error" id="pinError" hidden>كلمة المرور غير صحيحة</div>
+
+      <button class="pin-back" id="pinBackBtn" type="button">
+        <i class="fas fa-arrow-right"></i>
+        <span>رجوع</span>
+      </button>
+    </section>
+
+    <!-- === ADD / EDIT PROFILE VIEW === -->
+    <section class="view edit-view" id="editView" hidden>
+      <h1 class="view-title" id="editTitle">إضافة بروفايل</h1>
+
+      <div class="edit-body">
+        <!-- Big avatar preview -->
+        <div class="edit-avatar-preview">
+          <img id="editAvatarImg" src="" alt="">
+          <button class="change-avatar-btn" id="changeAvatarBtn" type="button" aria-label="تغيير الصورة">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </div>
+
+        <!-- Form -->
+        <form class="edit-form" id="editForm" novalidate>
+          <div class="form-field">
+            <input type="text"
+                   id="editName"
+                   placeholder="الاسم"
+                   maxlength="20"
+                   autocomplete="off"
+                   required>
+          </div>
+
+          <label class="form-toggle">
+            <div class="toggle-info">
+              <strong>وضع الأطفال</strong>
+              <span>عرض محتوى مناسب للأطفال فقط</span>
+            </div>
+            <input type="checkbox" id="editKids">
+            <span class="toggle-switch"></span>
+          </label>
+
+          <label class="form-toggle">
+            <div class="toggle-info">
+              <strong>قفل البروفايل بكلمة مرور</strong>
+              <span>يجب إدخال 4 أرقام قبل الدخول</span>
+            </div>
+            <input type="checkbox" id="editHasPin">
+            <span class="toggle-switch"></span>
+          </label>
+
+          <div class="pin-setup" id="pinSetup" hidden>
+            <label class="pin-setup-label">أدخل 4 أرقام</label>
+            <div class="pin-inputs pin-inputs-small" id="pinSetupInputs">
+              <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-sidx="0">
+              <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-sidx="1">
+              <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-sidx="2">
+              <input type="password" inputmode="numeric" maxlength="1" class="pin-box" data-sidx="3">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save" id="saveBtn">
+              <i class="fas fa-check"></i>
+              حفظ
+            </button>
+            <button type="button" class="btn-cancel" id="cancelBtn">إلغاء</button>
+            <button type="button" class="btn-delete" id="deleteBtn" hidden>
+              <i class="fas fa-trash"></i>
+              حذف البروفايل
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- === AVATAR GALLERY VIEW === -->
+    <section class="view gallery-view" id="galleryView" hidden>
+      <div class="gallery-header">
+        <button class="gallery-back" id="galleryBackBtn" type="button">
+          <i class="fas fa-arrow-right"></i>
+          <span>رجوع</span>
+        </button>
+        <h2 class="gallery-title">اختر صورة</h2>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- avatars render here -->
+      </div>
+    </section>
+
+    <!-- === MANAGE VIEW === -->
+    <section class="view manage-view" id="manageView" hidden>
+      <h1 class="view-title">إدارة البروفايلات</h1>
+
+      <div class="profiles-grid" id="manageGrid">
+        <!-- profiles with edit overlays render here -->
+      </div>
+
+      <button class="manage-btn done-btn" id="doneBtn" type="button">تم</button>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/profiles.js?v=177"></script>
+  <script src="js/profiles-page.js?v=177"></script>
+</body>
+</html>

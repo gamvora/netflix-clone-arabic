@@ -1,57 +1,22 @@
 // ====================================================
-// NETFLIX-STYLE PLAYER - Multi-server, auto-play, remembered server per content
+// NETFLIX-STYLE PLAYER - 2 servers, auto-play, Arabic subtitles
+// Server is chosen from the picker BEFORE entering this page
 // ====================================================
 
 const SERVERS = [
   {
     id: 'videasy',
     name: 'Videasy',
-    nameAr: 'السيرفر الرئيسي',
-    badge: 'HD',
-    description: 'السيرفر الأصلي - جودة عالية مع ترجمة عربية',
-    icon: 'fa-bolt',
+    nameAr: 'السيرفر 1',
     movieUrl: (id) => `https://player.videasy.net/movie/${id}?color=e50914&autoplay=true&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar`,
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
     id: 'vidsrc',
     name: 'VidSrc',
-    nameAr: 'سيرفر عالمي',
-    badge: '4K',
-    description: 'تركي • عربي • كوري • آسيوي مع ترجمة',
-    icon: 'fa-globe',
+    nameAr: 'السيرفر 2',
     movieUrl: (id) => `https://vidsrc.xyz/embed/movie?tmdb=${id}&ds_lang=ar`,
     tvUrl: (id, s, e) => `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}&ds_lang=ar`
-  },
-  {
-    id: 'vidsrcto',
-    name: 'VidSrc.to',
-    nameAr: 'سيرفر بديل',
-    badge: 'HD',
-    description: 'كتالوج ضخم متعدد الجودات',
-    icon: 'fa-play-circle',
-    movieUrl: (id) => `https://vidsrc.to/embed/movie/${id}`,
-    tvUrl: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`
-  },
-  {
-    id: 'autoembed',
-    name: 'AutoEmbed',
-    nameAr: 'سيرفر آسيوي',
-    badge: 'ASIA',
-    description: 'محتوى آسيوي وتركي مع ترجمة عربية',
-    icon: 'fa-dragon',
-    movieUrl: (id) => `https://player.autoembed.cc/embed/movie/${id}`,
-    tvUrl: (id, s, e) => `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`
-  },
-  {
-    id: '2embed',
-    name: '2Embed',
-    nameAr: 'سيرفر احتياطي',
-    badge: 'BACKUP',
-    description: 'احتياطي إذا توقف الباقي',
-    icon: 'fa-shield-alt',
-    movieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
-    tvUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
   }
 ];
 
@@ -112,9 +77,13 @@ const Player = {
     this.currentSeason = season;
     this.currentEpisode = episode;
 
+    // Choose server: URL param > last saved > default (Videasy)
     this.currentServerId = (urlServer && SERVERS.find(s => s.id === urlServer))
       ? urlServer
       : this.getLastServer();
+
+    // Persist so continue-watching works later
+    if (urlServer) this.setLastServer(urlServer);
 
     try {
       const details = type === 'tv'
@@ -134,7 +103,6 @@ const Player = {
     if (type === 'tv' && !params.get('e') && !isResuming) {
       this.renderEpisodePicker();
     } else {
-      // If resuming a TV show without episode param, use the saved episode
       if (type === 'tv' && !params.get('e') && isResuming) {
         const saved = continueList.find(x => String(x.id) === String(id) && x.type === type);
         if (saved && saved.season && saved.episode) {
@@ -284,7 +252,7 @@ const Player = {
     }
   },
 
-  // ============ MAIN PLAYER ============
+  // ============ MAIN PLAYER (NO SERVER BUTTON INSIDE) ============
   renderPlayer() {
     const d = this.currentDetails;
     const wrapper = document.getElementById('playerWrapper');
@@ -300,20 +268,6 @@ const Player = {
       ? `watch.html?id=${this.currentId}&type=tv`
       : 'index.html';
 
-    const serverOptions = SERVERS.map(s => `
-      <button class="nf-server-item ${s.id === this.currentServerId ? 'active' : ''}" data-server="${s.id}" tabindex="0">
-        <div class="nf-server-icon"><i class="fas ${s.icon}"></i></div>
-        <div class="nf-server-info">
-          <div class="nf-server-name">
-            <span>${s.nameAr}</span>
-            <span class="nf-server-badge">${s.badge}</span>
-          </div>
-          <div class="nf-server-desc">${s.description}</div>
-        </div>
-        ${s.id === this.currentServerId ? '<i class="fas fa-check nf-server-check"></i>' : ''}
-      </button>
-    `).join('');
-
     wrapper.innerHTML = `
       <div class="nf-player" id="nfPlayer">
         <div class="nf-top" id="nfTop">
@@ -325,23 +279,6 @@ const Player = {
             <div class="nf-now-playing">
               <span class="nf-np-label">يُعرض الآن · ${currentServer.nameAr}</span>
               <span class="nf-np-title">${title} <span class="nf-np-year">(${epLabel})</span></span>
-            </div>
-          </div>
-          <div class="nf-top-right">
-            <button class="nf-server-btn" id="serverBtn" title="اختيار سيرفر" tabindex="0">
-              <i class="fas fa-server"></i>
-              <span>السيرفرات</span>
-              <i class="fas fa-chevron-down nf-chev"></i>
-            </button>
-            <div class="nf-server-menu" id="serverMenu">
-              <div class="nf-server-menu-header">
-                <i class="fas fa-server"></i>
-                <span>اختر السيرفر المفضل</span>
-              </div>
-              <div class="nf-server-list">${serverOptions}</div>
-              <div class="nf-server-menu-footer">
-                <i class="fas fa-info-circle"></i> إذا لم يعمل المحتوى، جرّب سيرفراً آخر
-              </div>
             </div>
           </div>
         </div>
@@ -388,32 +325,6 @@ const Player = {
     });
     setTimeout(() => loader?.classList.add('hidden'), 6000);
 
-    // Server menu toggle
-    const serverBtn = document.getElementById('serverBtn');
-    const serverMenu = document.getElementById('serverMenu');
-    if (serverBtn && serverMenu) {
-      serverBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        serverMenu.classList.toggle('open');
-      });
-      document.addEventListener('click', (e) => {
-        if (!serverMenu.contains(e.target) && !serverBtn.contains(e.target)) {
-          serverMenu.classList.remove('open');
-        }
-      });
-      serverMenu.querySelectorAll('.nf-server-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const newServerId = item.dataset.server;
-          if (newServerId === this.currentServerId) {
-            serverMenu.classList.remove('open');
-            return;
-          }
-          this.switchServer(newServerId);
-        });
-      });
-    }
-
     if (this.currentType === 'tv') {
       document.getElementById('prevEpBtn')?.addEventListener('click', () => this.goToPrevEpisode());
       document.getElementById('nextEpBtn')?.addEventListener('click', () => this.goToNextEpisode());
@@ -426,45 +337,6 @@ const Player = {
     this.setupAutoHide();
   },
 
-  switchServer(newServerId) {
-    this.currentServerId = newServerId;
-    this.setLastServer(newServerId);
-    const server = this.getServer(newServerId);
-    const frame = document.getElementById('nfFrame');
-    const loader = document.getElementById('nfLoader');
-    const menu = document.getElementById('serverMenu');
-    const loaderText = loader?.querySelector('.nf-loader-text');
-    const npLabel = document.querySelector('.nf-np-label');
-
-    if (loader) loader.classList.remove('hidden');
-    if (loaderText) loaderText.textContent = `جاري التحميل من ${server.nameAr}...`;
-    if (npLabel) {
-      const title = Utils.getTitle(this.currentDetails);
-      npLabel.textContent = `يُعرض الآن · ${server.nameAr}`;
-    }
-    if (menu) menu.classList.remove('open');
-
-    const newUrl = this.buildUrl(this.currentType, this.currentId, this.currentSeason, this.currentEpisode);
-    if (frame) frame.src = newUrl;
-
-    document.querySelectorAll('.nf-server-item').forEach(it => {
-      const isActive = it.dataset.server === newServerId;
-      it.classList.toggle('active', isActive);
-      const existing = it.querySelector('.nf-server-check');
-      if (isActive && !existing) {
-        const check = document.createElement('i');
-        check.className = 'fas fa-check nf-server-check';
-        it.appendChild(check);
-      } else if (!isActive && existing) {
-        existing.remove();
-      }
-    });
-
-    if (Utils.showToast) Utils.showToast(`تم التبديل إلى ${server.nameAr}`);
-
-    setTimeout(() => loader?.classList.add('hidden'), 6000);
-  },
-
   goToPrevEpisode() {
     if (this.currentEpisode > 1) {
       this.currentEpisode--;
@@ -474,7 +346,8 @@ const Player = {
     } else {
       return;
     }
-    window.location.href = `watch.html?id=${this.currentId}&type=tv&s=${this.currentSeason}&e=${this.currentEpisode}`;
+    const serverParam = `&server=${this.currentServerId}`;
+    window.location.href = `watch.html?id=${this.currentId}&type=tv&s=${this.currentSeason}&e=${this.currentEpisode}${serverParam}`;
   },
 
   async goToNextEpisode() {
@@ -491,7 +364,8 @@ const Player = {
         return;
       }
     }
-    window.location.href = `watch.html?id=${this.currentId}&type=tv&s=${this.currentSeason}&e=${this.currentEpisode}`;
+    const serverParam = `&server=${this.currentServerId}`;
+    window.location.href = `watch.html?id=${this.currentId}&type=tv&s=${this.currentSeason}&e=${this.currentEpisode}${serverParam}`;
   },
 
   attachKeyboardShortcuts() {

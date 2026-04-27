@@ -57,7 +57,7 @@ const MyListPage = {
     // Clear all button
     document.getElementById('clearAllBtn')?.addEventListener('click', () => {
       if (confirm('هل أنت متأكد من مسح كل قائمتي؟ لا يمكن التراجع عن هذه العملية.')) {
-        localStorage.setItem('netflixMyList', '[]');
+        Utils.clearMyList();
         Utils.showToast('تم مسح قائمتي');
         setTimeout(() => location.reload(), 600);
       }

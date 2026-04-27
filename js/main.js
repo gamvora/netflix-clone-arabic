@@ -109,9 +109,9 @@ const Main = {
         </div>
         <p class="hero-overview">${overview || 'لا يوجد وصف متاح'}</p>
         <div class="hero-actions">
-          <a href="watch.html?id=${id}&type=${type}" class="btn btn-primary">
+          <button class="btn btn-primary btn-hero-play" data-id="${id}" data-type="${type}">
             <i class="fas fa-play"></i> تشغيل
-          </a>
+          </button>
           <button class="btn btn-secondary" onclick="Utils.openDetailsModal(${id}, '${type}')">
             <i class="fas fa-info-circle"></i> مزيد من المعلومات
           </button>
@@ -130,6 +130,16 @@ const Main = {
         this.restartHeroRotation();
       });
     });
+
+    const playBtn = hero.querySelector('.btn-hero-play');
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        Utils.showServerPicker({
+          id: playBtn.dataset.id,
+          type: playBtn.dataset.type
+        });
+      });
+    }
   },
 
   startHeroRotation() {

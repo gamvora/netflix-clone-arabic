@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Seed Test Profile</title>
+<style>
+body { background: #141414; color: #fff; font-family: sans-serif; padding: 40px; text-align: center; }
+a { color: #e50914; font-size: 20px; }
+</style>
+</head>
+<body>
+<h1>Seeding test profile…</h1>
+<p id="status">…</p>
+<p><a href="index.html">→ Go to Homepage</a></p>
+<script>
+// Seed a profile + mark intro seen so guard lets us in
+const profiles = [{
+  id: 'test_profile_1',
+  name: 'أحمد',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4',
+  kids: false,
+  pin: null,
+  createdAt: Date.now()
+}];
+localStorage.setItem('netflixy_profiles', JSON.stringify(profiles));
+localStorage.setItem('netflixy_active_profile', 'test_profile_1');
+localStorage.setItem('netflixy_intro_seen', '1');
+document.getElementById('status').textContent = '✅ Profile seeded. Click link below.';
+</script>
+</body>
+</html>

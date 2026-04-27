@@ -43,11 +43,17 @@ const MoviesPage = {
             ${showArTitle ? `<div class="hero-ar-title">${titleAr}</div>` : ''}
             <p class="hero-overview">${Utils.truncate(featured.overview, 200)}</p>
             <div class="hero-actions">
-              <a href="watch.html?id=${featured.id}&type=movie" class="btn btn-primary"><i class="fas fa-play"></i> تشغيل</a>
+              <button class="btn btn-primary btn-hero-play" data-id="${featured.id}" data-type="movie"><i class="fas fa-play"></i> تشغيل</button>
               <button class="btn btn-secondary" onclick="Utils.openDetailsModal(${featured.id}, 'movie')"><i class="fas fa-info-circle"></i> مزيد من المعلومات</button>
             </div>
           </div>
         `;
+        const playBtn = hero.querySelector('.btn-hero-play');
+        if (playBtn) {
+          playBtn.addEventListener('click', () => {
+            Utils.showServerPicker({ id: playBtn.dataset.id, type: playBtn.dataset.type });
+          });
+        }
       }
     }
     

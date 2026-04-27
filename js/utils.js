@@ -51,6 +51,106 @@ const Utils = {
     catch { return ''; }
   },
 
+  // ====== SERVER PICKER ======
+  // Shows a modal asking the user to pick server 1 or 2 before entering the watch page.
+  // opts: { id, type, season, episode }
+  showServerPicker(opts) {
+    const id = opts.id;
+    const type = opts.type || 'movie';
+    const season = opts.season || null;
+    const episode = opts.episode || null;
+
+    // Default server preference from localStorage (Videasy if nothing saved)
+    let defaultServer = 'videasy';
+    try {
+      const saved = localStorage.getItem(`netflixServer_${type}_${id}`)
+                 || localStorage.getItem('netflixDefaultServer');
+      if (saved === 'videasy' || saved === 'vidsrc') defaultServer = saved;
+    } catch {}
+
+    // Remove existing picker if present
+    const existing = document.getElementById('serverPickerModal');
+    if (existing) existing.remove();
+
+    const picker = document.createElement('div');
+    picker.id = 'serverPickerModal';
+    picker.className = 'srv-picker-modal active';
+    picker.innerHTML = `
+      <div class="srv-picker-backdrop"></div>
+      <div class="srv-picker-box">
+        <button class="srv-picker-close" title="إغلاق" aria-label="إغلاق">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="srv-picker-header">
+          <div class="srv-picker-icon"><i class="fas fa-play-circle"></i></div>
+          <h2>اختر السيرفر</h2>
+          <p>يمكنك التبديل بين السيرفرات إذا لم يعمل أحدهما</p>
+        </div>
+        <div class="srv-picker-list">
+          <button class="srv-picker-option ${defaultServer === 'videasy' ? 'recommended' : ''}" data-server="videasy">
+            <div class="srv-picker-opt-icon"><i class="fas fa-bolt"></i></div>
+            <div class="srv-picker-opt-body">
+              <div class="srv-picker-opt-title">
+                <span>السيرفر 1</span>
+                <span class="srv-picker-badge">مُوصى به</span>
+              </div>
+              <div class="srv-picker-opt-desc">جودة عالية HD • ترجمة عربية تلقائية</div>
+            </div>
+            <i class="fas fa-chevron-left srv-picker-chev"></i>
+          </button>
+          <button class="srv-picker-option" data-server="vidsrc">
+            <div class="srv-picker-opt-icon"><i class="fas fa-globe"></i></div>
+            <div class="srv-picker-opt-body">
+              <div class="srv-picker-opt-title">
+                <span>السيرفر 2</span>
+                <span class="srv-picker-badge alt">بديل</span>
+              </div>
+              <div class="srv-picker-opt-desc">محتوى عالمي • تركي • آسيوي مع ترجمة</div>
+            </div>
+            <i class="fas fa-chevron-left srv-picker-chev"></i>
+          </button>
+        </div>
+        <div class="srv-picker-footer">
+          <i class="fas fa-info-circle"></i>
+          <span>إذا لم يعمل السيرفر، ارجع وجرّب الآخر</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(picker);
+    document.body.style.overflow = 'hidden';
+
+    const close = () => {
+      picker.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => picker.remove(), 200);
+    };
+
+    picker.querySelector('.srv-picker-close').addEventListener('click', close);
+    picker.querySelector('.srv-picker-backdrop').addEventListener('click', close);
+    const escHandler = (e) => {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    picker.querySelectorAll('.srv-picker-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const serverId = btn.dataset.server;
+        // Persist choice so continue-watching auto-uses it later
+        try {
+          localStorage.setItem(`netflixServer_${type}_${id}`, serverId);
+          localStorage.setItem('netflixDefaultServer', serverId);
+        } catch {}
+        let url = `watch.html?id=${id}&type=${type}&server=${serverId}`;
+        if (type === 'tv' && season) url += `&s=${season}`;
+        if (type === 'tv' && episode) url += `&e=${episode}`;
+        window.location.href = url;
+      });
+    });
+
+    // Focus first option for keyboard users
+    setTimeout(() => picker.querySelector('.srv-picker-option')?.focus(), 100);
+  },
+
   createCard(item, index = 0) {
     const poster = this.getImage(item.poster_path, 'w500');
     const title = this.getTitle(item);
@@ -142,7 +242,8 @@ const Utils = {
           return;
         }
         if (e.target.closest('.btn-play') || e.target.closest('.card-play-hover')) {
-          window.location.href = `watch.html?id=${id}&type=${type}`;
+          e.preventDefault(); e.stopPropagation();
+          this.showServerPicker({ id, type });
         } else if (e.target.closest('.btn-add')) {
           const added = this.toggleMyList(id, type);
           this.showToast(added ? 'تمت الإضافة إلى قائمتي' : 'تمت الإزالة من قائمتي');
@@ -237,17 +338,52 @@ const Utils = {
     setTimeout(() => row.classList.remove('highlighted'), 5000);
   },
 
-  getMyList() { try { return JSON.parse(localStorage.getItem('netflixMyList') || '[]'); } catch { return []; } },
+  // ===== PER-PROFILE STORAGE HELPERS =====
+  // Each profile has its own "My List" and "Continue Watching" so users don't mix data.
+  getActiveProfileId() {
+    try {
+      const id = localStorage.getItem('netflixy_active_profile');
+      return id || 'guest';
+    } catch { return 'guest'; }
+  },
+  _myListKey() { return `netflixMyList_${this.getActiveProfileId()}`; },
+  _continueKey() { return `netflixContinue_${this.getActiveProfileId()}`; },
+
+  // Migrate legacy global keys to the active profile ONCE (first time we see them)
+  _migrateLegacyStorage() {
+    try {
+      const pid = this.getActiveProfileId();
+      if (pid === 'guest') return;
+      const migrated = localStorage.getItem(`netflix_migrated_${pid}`);
+      if (migrated === '1') return;
+
+      const oldList = localStorage.getItem('netflixMyList');
+      if (oldList && !localStorage.getItem(this._myListKey())) {
+        localStorage.setItem(this._myListKey(), oldList);
+      }
+      const oldCont = localStorage.getItem('netflixContinue');
+      if (oldCont && !localStorage.getItem(this._continueKey())) {
+        localStorage.setItem(this._continueKey(), oldCont);
+      }
+      localStorage.setItem(`netflix_migrated_${pid}`, '1');
+    } catch {}
+  },
+
+  getMyList() {
+    this._migrateLegacyStorage();
+    try { return JSON.parse(localStorage.getItem(this._myListKey()) || '[]'); } catch { return []; }
+  },
   addToMyList(item) {
     const list = this.getMyList();
     if (!list.find(x => x.id == item.id && x.type == item.type)) {
-      list.push(item); localStorage.setItem('netflixMyList', JSON.stringify(list)); return true;
+      list.push(item); localStorage.setItem(this._myListKey(), JSON.stringify(list)); return true;
     } return false;
   },
   removeFromMyList(id, type) {
     const list = this.getMyList().filter(x => !(x.id == id && x.type == type));
-    localStorage.setItem('netflixMyList', JSON.stringify(list));
+    localStorage.setItem(this._myListKey(), JSON.stringify(list));
   },
+  clearMyList() { localStorage.setItem(this._myListKey(), '[]'); },
   toggleMyList(id, type) {
     if (this.isInMyList(id, type)) { this.removeFromMyList(id, type); return false; }
     this.addToMyList({ id, type, addedAt: Date.now() }); return true;
@@ -255,7 +391,8 @@ const Utils = {
   isInMyList(id, type) { return !!this.getMyList().find(x => x.id == id && x.type == type); },
 
   getContinueWatching() {
-    try { return JSON.parse(localStorage.getItem('netflixContinue') || '[]').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)); }
+    this._migrateLegacyStorage();
+    try { return JSON.parse(localStorage.getItem(this._continueKey()) || '[]').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)); }
     catch { return []; }
   },
   saveContinueWatching(data) {
@@ -271,16 +408,16 @@ const Utils = {
       };
       if (existing >= 0) list[existing] = entry; else list.push(entry);
       list = list.sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 20);
-      localStorage.setItem('netflixContinue', JSON.stringify(list));
+      localStorage.setItem(this._continueKey(), JSON.stringify(list));
     } catch (e) {}
   },
   removeFromContinueWatching(id, type) {
     try {
       const list = this.getContinueWatching().filter(x => !(x.id == id && x.type == type));
-      localStorage.setItem('netflixContinue', JSON.stringify(list));
+      localStorage.setItem(this._continueKey(), JSON.stringify(list));
     } catch {}
   },
-  clearContinueWatching() { localStorage.setItem('netflixContinue', '[]'); },
+  clearContinueWatching() { localStorage.setItem(this._continueKey(), '[]'); },
 
   showToast(message, duration = 2500) {
     let toast = document.getElementById('toast');
@@ -327,7 +464,7 @@ const Utils = {
           <h1>${title}</h1>
           ${showArTitle ? `<div class="modal-ar-title">${titleAr}</div>` : ''}
           <div class="modal-actions">
-            <a href="watch.html?id=${id}&type=${type}" class="btn btn-primary"><i class="fas fa-play"></i> تشغيل</a>
+            <button class="btn btn-primary btn-play-modal" data-id="${id}" data-type="${type}"><i class="fas fa-play"></i> تشغيل</button>
             <button class="btn btn-secondary btn-trailer-modal" data-key="${trailer ? trailer.key : ''}" data-id="${id}" data-type="${type}"><i class="fas fa-film"></i> الإعلان الدعائي</button>
             <button class="btn-circle btn-toggle-list" data-id="${id}" data-type="${type}" title="${inList ? 'إزالة من قائمتي' : 'أضف لقائمتي'}"><i class="fas ${inList ? 'fa-check' : 'fa-plus'}"></i></button>
           </div>
@@ -358,7 +495,7 @@ const Utils = {
               const sType = this.getMediaType(s);
               const simTitle = this.getTitle(s);
               return `
-                <a href="watch.html?id=${s.id}&type=${sType}" class="sim-card">
+                <button class="sim-card" data-sim-id="${s.id}" data-sim-type="${sType}">
                   <img src="${this.getBackdrop(s.backdrop_path || s.poster_path)}" alt="${simTitle}" loading="lazy">
                   <div class="sim-play"><i class="fas fa-play"></i></div>
                   <div class="sim-overlay">
@@ -367,7 +504,7 @@ const Utils = {
                       <span>${Math.round((s.vote_average || 0) * 10)}% • ${this.getYear(s)}</span>
                     </div>
                   </div>
-                </a>`;
+                </button>`;
             }).join('')}
           </div>
         </div>` : ''}
@@ -381,6 +518,26 @@ const Utils = {
         else this.openTrailerFor(trailerBtn.dataset.id, trailerBtn.dataset.type);
       });
     }
+    const playModalBtn = body.querySelector('.btn-play-modal');
+    if (playModalBtn) {
+      playModalBtn.addEventListener('click', () => {
+        // Close the details modal first, then show the server picker
+        const detailsModal = document.getElementById('detailsModal');
+        if (detailsModal) {
+          detailsModal.classList.remove('active');
+        }
+        document.body.style.overflow = '';
+        this.showServerPicker({ id: playModalBtn.dataset.id, type: playModalBtn.dataset.type });
+      });
+    }
+    body.querySelectorAll('.sim-card').forEach(simBtn => {
+      simBtn.addEventListener('click', () => {
+        const detailsModal = document.getElementById('detailsModal');
+        if (detailsModal) detailsModal.classList.remove('active');
+        document.body.style.overflow = '';
+        this.showServerPicker({ id: simBtn.dataset.simId, type: simBtn.dataset.simType });
+      });
+    });
     const addBtn = body.querySelector('.btn-toggle-list');
     if (addBtn) {
       addBtn.addEventListener('click', () => {

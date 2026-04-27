@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Netflix - الرئيسية | شاهد أفلامك ومسلسلاتك المفضلة</title>
-  <meta name="description" content="منصة Netflix العربية - شاهد أحدث الأفلام والمسلسلات مع ترجمة عربية كاملة">
+  <title>NETFLIXY - الرئيسية | شاهد أفلامك ومسلسلاتك المفضلة</title>
+  <meta name="description" content="منصة NETFLIXY العربية - شاهد أحدث الأفلام والمسلسلات مع ترجمة عربية كاملة">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,19 +12,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914'>N</text></svg>">
   
-  <link rel="stylesheet" href="css/style.css?v=173">
-  <link rel="stylesheet" href="css/responsive.css?v=173">
+  <link rel="stylesheet" href="css/style.css?v=175">
+  <link rel="stylesheet" href="css/responsive.css?v=175">
+
+  <!-- Profile guard: redirects to profiles.html / intro.html if no active profile -->
+  <script src="js/profiles.js?v=175"></script>
+  <script src="js/profile-guard.js?v=177"></script>
 </head>
 <body>
 
   <div class="main-loader" id="mainLoader">
-    <div class="loader-logo">NETFLIX</div>
+    <div class="loader-logo">NETFLIX<span style="color:#fff;background:#e50914;padding:0 6px;border-radius:4px;display:inline-block;transform:rotate(-4deg);margin-right:-2px;">Y</span></div>
     <div class="loader-bar"></div>
   </div>
 
   <nav class="navbar">
     <div class="nav-left">
-      <a href="index.html" class="logo">NETFLIX</a>
+      <a href="index.html" class="logo">NETFLIX<span class="logo-y">Y</span></a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">الرئيسية</a></li>
         <li><a href="tvshows.html">مسلسلات</a></li>
@@ -58,7 +62,7 @@
     </div>
     <div class="nav-right">
       <a href="search.html" class="nav-search" title="بحث"><i class="fas fa-search"></i></a>
-      <div class="nav-profile" title="الملف الشخصي">U</div>
+      <div class="nav-profile" title="البروفايل"></div>
       <button class="menu-toggle" title="القائمة"><i class="fas fa-bars"></i></button>
     </div>
   </nav>
@@ -293,15 +297,15 @@
       <a href="#">معلومات الشركة</a>
     </div>
     <p class="footer-copyright">
-      © 2025 Netflix Clone - مشروع تعليمي. البيانات من 
+      © 2025 NETFLIXY - مشروع تعليمي. البيانات من 
       <a href="https://www.themoviedb.org/" target="_blank" style="color: var(--netflix-red);">TMDB</a>
     </p>
   </footer>
 
-  <script src="js/config.js?v=173"></script>
-  <script src="js/api.js?v=173"></script>
-  <script src="js/utils.js?v=173"></script>
-  <script src="js/main.js?v=173"></script>
-  <script src="js/tv-nav.js?v=173"></script>
+  <script src="js/config.js?v=175"></script>
+  <script src="js/api.js?v=175"></script>
+  <script src="js/utils.js?v=175"></script>
+  <script src="js/main.js?v=175"></script>
+  <script src="js/tv-nav.js?v=175"></script>
 </body>
 </html>

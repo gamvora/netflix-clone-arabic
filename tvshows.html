@@ -1,58 +1,62 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المسلسلات | Netflix</title>
-  <meta name="description" content="تصفح أحدث وأفضل المسلسلات مع ترجمة عربية">
+  <title>????????? | Netflix</title>
+  <meta name="description" content="???? ???? ????? ????????? ?? ????? ?????">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=173">
-  <link rel="stylesheet" href="css/responsive.css?v=173">
+  <link rel="stylesheet" href="css/style.css?v=175">
+  <link rel="stylesheet" href="css/responsive.css?v=175">
+
+  <!-- Profile guard: redirects to profiles.html / intro.html if no active profile -->
+  <script src="js/profiles.js?v=175"></script>
+  <script src="js/profile-guard.js?v=177"></script>
 </head>
 <body>
 
   <nav class="navbar">
     <div class="nav-left">
-      <a href="index.html" class="logo">NETFLIX</a>
+      <a href="index.html" class="logo">NETFLIX<span class="logo-y">Y</span></a>
       <ul class="nav-links">
-        <li><a href="index.html">الرئيسية</a></li>
-        <li><a href="tvshows.html" class="active">مسلسلات</a></li>
-        <li><a href="movies.html">أفلام</a></li>
+        <li><a href="index.html">????????</a></li>
+        <li><a href="tvshows.html" class="active">???????</a></li>
+        <li><a href="movies.html">?????</a></li>
         <li class="nav-dropdown">
-          <a href="#" class="nav-dropdown-toggle">تصفح حسب النوع <i class="fas fa-caret-down"></i></a>
+          <a href="#" class="nav-dropdown-toggle">???? ??? ????? <i class="fas fa-caret-down"></i></a>
           <ul class="nav-dropdown-menu">
-            <li><a href="genre.html?type=action"><i class="fas fa-fist-raised"></i>Ø£ÙƒØ´Ù†</a></li>
-            <li><a href="genre.html?type=comedy"><i class="fas fa-laugh"></i>ÙƒÙˆÙ…ÙŠØ¯ÙŠ</a></li>
-            <li><a href="genre.html?type=horror"><i class="fas fa-ghost"></i>Ø±Ø¹Ø¨</a></li>
-            <li><a href="genre.html?type=romance"><i class="fas fa-heart"></i>Ø±ÙˆÙ…Ø§Ù†Ø³ÙŠ</a></li>
-            <li><a href="genre.html?type=scifi"><i class="fas fa-rocket"></i>Ø®ÙŠØ§Ù„ Ø¹Ù„Ù…ÙŠ</a></li>
-            <li><a href="genre.html?type=thriller"><i class="fas fa-user-secret"></i>Ø¥Ø«Ø§Ø±Ø©</a></li>
-            <li><a href="genre.html?type=animation"><i class="fas fa-magic"></i>Ø±Ø³ÙˆÙ… Ù…ØªØ­Ø±ÙƒØ©</a></li>
-            <li><a href="genre.html?type=documentary"><i class="fas fa-film"></i>ÙˆØ«Ø§Ø¦Ù‚ÙŠ</a></li>
-            <li><a href="genre.html?type=crime"><i class="fas fa-mask"></i>Ø¬Ø±ÙŠÙ…Ø©</a></li>
-            <li><a href="genre.html?type=drama"><i class="fas fa-theater-masks"></i>Ø¯Ø±Ø§Ù…Ø§</a></li>
-            <li><a href="genre.html?type=fantasy"><i class="fas fa-hat-wizard"></i>ÙØ§Ù†ØªØ§Ø²ÙŠØ§</a></li>
-            <li><a href="genre.html?type=adventure"><i class="fas fa-mountain"></i>Ù…ØºØ§Ù…Ø±Ø©</a></li>
-            <li><a href="genre.html?type=family"><i class="fas fa-users"></i>Ø¹Ø§Ø¦Ù„ÙŠ</a></li>
-            <li><a href="genre.html?type=mystery"><i class="fas fa-search"></i>ØºÙ…ÙˆØ¶</a></li>
-            <li><a href="genre.html?type=war"><i class="fas fa-fighter-jet"></i>Ø­Ø±Ø¨</a></li>
-            <li><a href="genre.html?type=korean"><i class="fas fa-star"></i>ÙƒÙˆØ±ÙŠ</a></li>
-            <li><a href="genre.html?type=anime"><i class="fas fa-dragon"></i>Ø£Ù†Ù…ÙŠ</a></li>
-            <li><a href="genre.html?type=arabic"><i class="fas fa-moon"></i>Ø¹Ø±Ø¨ÙŠ</a></li>
+            <li><a href="genre.html?type=action"><i class="fas fa-fist-raised"></i>أكشن</a></li>
+            <li><a href="genre.html?type=comedy"><i class="fas fa-laugh"></i>كوميدي</a></li>
+            <li><a href="genre.html?type=horror"><i class="fas fa-ghost"></i>رعب</a></li>
+            <li><a href="genre.html?type=romance"><i class="fas fa-heart"></i>رومانسي</a></li>
+            <li><a href="genre.html?type=scifi"><i class="fas fa-rocket"></i>خيال علمي</a></li>
+            <li><a href="genre.html?type=thriller"><i class="fas fa-user-secret"></i>إثارة</a></li>
+            <li><a href="genre.html?type=animation"><i class="fas fa-magic"></i>رسوم متحركة</a></li>
+            <li><a href="genre.html?type=documentary"><i class="fas fa-film"></i>وثائقي</a></li>
+            <li><a href="genre.html?type=crime"><i class="fas fa-mask"></i>جريمة</a></li>
+            <li><a href="genre.html?type=drama"><i class="fas fa-theater-masks"></i>دراما</a></li>
+            <li><a href="genre.html?type=fantasy"><i class="fas fa-hat-wizard"></i>فانتازيا</a></li>
+            <li><a href="genre.html?type=adventure"><i class="fas fa-mountain"></i>مغامرة</a></li>
+            <li><a href="genre.html?type=family"><i class="fas fa-users"></i>عائلي</a></li>
+            <li><a href="genre.html?type=mystery"><i class="fas fa-search"></i>غموض</a></li>
+            <li><a href="genre.html?type=war"><i class="fas fa-fighter-jet"></i>حرب</a></li>
+            <li><a href="genre.html?type=korean"><i class="fas fa-star"></i>كوري</a></li>
+            <li><a href="genre.html?type=anime"><i class="fas fa-dragon"></i>أنمي</a></li>
+            <li><a href="genre.html?type=arabic"><i class="fas fa-moon"></i>عربي</a></li>
           </ul>
         </li>
-        <li><a href="mylist.html">قائمتي</a></li>
-        <li><a href="search.html">بحث</a></li>
+        <li><a href="mylist.html">??????</a></li>
+        <li><a href="search.html">???</a></li>
       </ul>
     </div>
     <div class="nav-right">
       <a href="search.html" class="nav-search"><i class="fas fa-search"></i></a>
-      <div class="nav-profile">U</div>
+      <div class="nav-profile" title="البروفايل"></div>
       <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </div>
   </nav>
@@ -62,7 +66,7 @@
   <section class="rows-section">
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">مسلسلات Netflix الأصلية</h2></div>
+      <div class="row-header"><h2 class="row-title">??????? Netflix ???????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-netflix"></div>
@@ -71,7 +75,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">المسلسلات الشائعة</h2></div>
+      <div class="row-header"><h2 class="row-title">????????? ???????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-popular"></div>
@@ -80,7 +84,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">الأعلى تقييماً</h2></div>
+      <div class="row-header"><h2 class="row-title">?????? ???????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-top-rated"></div>
@@ -89,7 +93,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">تُعرض حالياً</h2></div>
+      <div class="row-header"><h2 class="row-title">????? ??????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-on-air"></div>
@@ -98,7 +102,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">تذاع اليوم</h2></div>
+      <div class="row-header"><h2 class="row-title">???? ?????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-airing-today"></div>
@@ -107,7 +111,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">أكشن ومغامرات</h2></div>
+      <div class="row-header"><h2 class="row-title">???? ????????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-action"></div>
@@ -116,7 +120,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">دراما</h2></div>
+      <div class="row-header"><h2 class="row-title">?????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-drama"></div>
@@ -125,7 +129,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">كوميدي</h2></div>
+      <div class="row-header"><h2 class="row-title">??????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-comedy"></div>
@@ -134,7 +138,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">جريمة</h2></div>
+      <div class="row-header"><h2 class="row-title">?????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-crime"></div>
@@ -143,7 +147,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">خيال علمي</h2></div>
+      <div class="row-header"><h2 class="row-title">???? ????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-scifi"></div>
@@ -152,7 +156,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">مسلسلات كورية</h2></div>
+      <div class="row-header"><h2 class="row-title">??????? ?????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-korean"></div>
@@ -161,7 +165,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">أنمي</h2></div>
+      <div class="row-header"><h2 class="row-title">????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-anime"></div>
@@ -170,7 +174,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">مسلسلات عربية</h2></div>
+      <div class="row-header"><h2 class="row-title">??????? ?????</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-arabic"></div>
@@ -195,13 +199,13 @@
   </div>
 
   <footer class="footer">
-    <p class="footer-copyright">© 2025 Netflix Clone. البيانات من TMDB</p>
+    <p class="footer-copyright">� 2025 Netflix Clone. ???????? ?? TMDB</p>
   </footer>
 
-  <script src="js/config.js?v=173"></script>
-  <script src="js/api.js?v=173"></script>
-  <script src="js/utils.js?v=173"></script>
-  <script src="js/tvshows.js?v=173"></script>
-  <script src="js/tv-nav.js?v=173"></script>
+  <script src="js/config.js?v=175"></script>
+  <script src="js/api.js?v=175"></script>
+  <script src="js/utils.js?v=175"></script>
+  <script src="js/tvshows.js?v=175"></script>
+  <script src="js/tv-nav.js?v=175"></script>
 </body>
 </html>

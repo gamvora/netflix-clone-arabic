@@ -104,11 +104,17 @@ const GenrePage = {
         ${showArTitle ? `<div class="hero-ar-title">${titleAr}</div>` : ''}
         <p class="hero-overview">${overview}</p>
         <div class="hero-actions">
-          <a href="watch.html?id=${item.id}&type=${mediaType}" class="btn btn-primary"><i class="fas fa-play"></i> تشغيل</a>
+          <button class="btn btn-primary btn-hero-play" data-id="${item.id}" data-type="${mediaType}"><i class="fas fa-play"></i> تشغيل</button>
           <button class="btn btn-secondary" onclick="Utils.openDetailsModal(${item.id}, '${mediaType}')"><i class="fas fa-info-circle"></i> مزيد من المعلومات</button>
         </div>
       </div>
     `;
+    const playBtn = hero.querySelector('.btn-hero-play');
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        Utils.showServerPicker({ id: playBtn.dataset.id, type: playBtn.dataset.type });
+      });
+    }
   },
 
   renderGenrePills(activeKey) {
