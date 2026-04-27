@@ -1,5 +1,6 @@
 // API Service - Handles all TMDB API calls
 // Strategy: Fetch English (for titles) + Arabic (for overviews) in parallel, merge overviews
+// SAFETY: Every response is filtered through isSafeContent() to block adult/porn/hentai content.
 const API = {
   
   // Generic fetch function
@@ -8,11 +9,21 @@ const API = {
       const response = await fetch(`${CONFIG.BASE_URL}${endpoint}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
+      // Apply safety filter to results array if present
+      if (data && Array.isArray(data.results)) {
+        data.results = data.results.filter(item => isSafeContent(item));
+      }
       return data;
     } catch (error) {
       console.error('API Error:', error, endpoint);
       return { results: [] };
     }
+  },
+
+  // Apply safety filter to a raw array of items
+  filterSafe(arr) {
+    if (!Array.isArray(arr)) return [];
+    return arr.filter(item => isSafeContent(item));
   },
 
   // Fetch a list endpoint in BOTH English and Arabic, merge overviews
@@ -39,10 +50,13 @@ const API = {
       return all;
     };
     
-    const [enAll, arAll] = await Promise.all([
+    let [enAll, arAll] = await Promise.all([
       fetchPages(enEndpoint),
       fetchPages(arEndpoint)
     ]);
+    // Double safety: filter again after merging (fetchData already filters, but be defensive)
+    enAll = this.filterSafe(enAll);
+    arAll = this.filterSafe(arAll);
     
     // Build Arabic overview lookup by id
     const arMap = new Map();
@@ -102,10 +116,13 @@ const API = {
     if (!genre) return { movies: [], tv: [], genre: null };
     const movieUrl = buildGenreUrl(genreKey, 'movie');
     const tvUrl = buildGenreUrl(genreKey, 'tv');
-    const [movies, tv] = await Promise.all([
+    let [movies, tv] = await Promise.all([
       movieUrl ? this.fetchBilingual(movieUrl, pages) : Promise.resolve([]),
       tvUrl ? this.fetchBilingual(tvUrl, pages) : Promise.resolve([])
     ]);
+    // Triple-check safety filter on final arrays
+    movies = this.filterSafe(movies);
+    tv = this.filterSafe(tv);
     // Ensure media_type is correctly set (discover endpoints don't always return it)
     movies.forEach(m => { if (!m.media_type) m.media_type = 'movie'; });
     tv.forEach(t => { if (!t.media_type) t.media_type = 'tv'; });
@@ -183,10 +200,10 @@ const API = {
     
     const [en, ar] = await Promise.all([this.fetchData(enUrl), this.fetchData(arUrl)]);
     const enResults = (en.results || []).filter(item => 
-      item.media_type !== 'person' && (item.poster_path || item.backdrop_path)
+      item.media_type !== 'person' && (item.poster_path || item.backdrop_path) && isSafeContent(item)
     );
     const arResults = (ar.results || []).filter(item => 
-      item.media_type !== 'person' && (item.poster_path || item.backdrop_path)
+      item.media_type !== 'person' && (item.poster_path || item.backdrop_path) && isSafeContent(item)
     );
     
     // Merge: English primary, add Arabic-only results + overview_ar

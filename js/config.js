@@ -13,8 +13,15 @@ const CONFIG = {
 };
 
 // Helper to add language and sorted params
-const L = `language=${CONFIG.LANGUAGE}`;
-const LFB = `language=${CONFIG.LANGUAGE_FALLBACK}`;
+// SAFE: include_adult=false is applied everywhere + without_keywords blocks erotic/hentai/porn keyword IDs
+// TMDB keyword IDs blocked:
+//   158718=erotic movie, 190370=erotica, 1501=erotic film, 5627=adult-film,
+//   9799=sex scene, 267103=pornography, 246466=hentai, 13141=softcore,
+//   210024=nudity, 289068=hentai-anime, 210024=nudity
+const BLOCKED_KEYWORDS = '158718,190370,1501,5627,9799,267103,246466,13141,210024,289068';
+const SAFE = `include_adult=false&without_keywords=${BLOCKED_KEYWORDS}`;
+const L = `language=${CONFIG.LANGUAGE}&${SAFE}`;
+const LFB = `language=${CONFIG.LANGUAGE_FALLBACK}&${SAFE}`;
 
 // API Endpoints - All now include language + support random pages for fresh content
 const ENDPOINTS = {
@@ -100,5 +107,24 @@ function buildGenreUrl(genreKey, mediaType /* 'movie' | 'tv' */) {
   if (!g) return null;
   const filter = g[mediaType];
   if (!filter) return null;
+  // L already includes include_adult=false + without_keywords
   return `/discover/${mediaType}?api_key=${CONFIG.API_KEY}&${L}&${filter}&sort_by=popularity.desc`;
+}
+
+// Client-side safety filter: removes any item flagged as adult or containing blocked keywords
+// Used as a second line of defense after server-side filtering
+const BLOCKED_KEYWORD_SET = new Set(BLOCKED_KEYWORDS.split(',').map(x => parseInt(x, 10)));
+function isSafeContent(item) {
+  if (!item) return false;
+  // TMDB movies have `adult: true/false` - block anything flagged adult
+  if (item.adult === true) return false;
+  // Block based on keywords if present on item
+  if (item.keywords && Array.isArray(item.keywords.keywords)) {
+    if (item.keywords.keywords.some(k => BLOCKED_KEYWORD_SET.has(k.id))) return false;
+  }
+  // Block based on title/overview text containing explicit adult indicators
+  const text = `${item.title || ''} ${item.name || ''} ${item.original_title || ''} ${item.original_name || ''}`.toLowerCase();
+  const blockedTerms = ['hentai', 'porno', 'pornograph', 'xxx-', 'erotic', 'softcore', 'hardcore sex'];
+  if (blockedTerms.some(t => text.includes(t))) return false;
+  return true;
 }
