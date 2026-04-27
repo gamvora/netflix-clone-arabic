@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>??????? | Netflix</title>
-  <meta name="description" content="???? ?????? ????? ?? ??????? ????? ??????? ?? ????? ?????">
+  <title>Movies | NETFLIXY</title>
+  <meta name="description" content="اكتشف أحدث الأفلام العالمية والعربية مع تجربة مشاهدة رائعة">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,19 +16,19 @@
 
   <!-- Profile guard: redirects to profiles.html / intro.html if no active profile -->
   <script src="js/profiles.js?v=175"></script>
-  <script src="js/profile-guard.js?v=177"></script>
+  <script src="js/profile-guard.js?v=178"></script>
 </head>
 <body>
 
   <nav class="navbar">
     <div class="nav-left">
-      <a href="index.html" class="logo">NETFLIX<span class="logo-y">Y</span></a>
+      <a href="index.html" class="logo" dir="ltr">NETFLIX<span class="logo-y">Y</span></a>
       <ul class="nav-links">
-        <li><a href="index.html">????????</a></li>
-        <li><a href="tvshows.html">???????</a></li>
-        <li><a href="movies.html" class="active">?????</a></li>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="tvshows.html">مسلسلات</a></li>
+        <li><a href="movies.html" class="active">أفلام</a></li>
         <li class="nav-dropdown">
-          <a href="#" class="nav-dropdown-toggle">???? ??? ????? <i class="fas fa-caret-down"></i></a>
+          <a href="#" class="nav-dropdown-toggle">تصفح حسب النوع <i class="fas fa-caret-down"></i></a>
           <ul class="nav-dropdown-menu">
             <li><a href="genre.html?type=action"><i class="fas fa-fist-raised"></i>أكشن</a></li>
             <li><a href="genre.html?type=comedy"><i class="fas fa-laugh"></i>كوميدي</a></li>
@@ -50,12 +50,12 @@
             <li><a href="genre.html?type=arabic"><i class="fas fa-moon"></i>عربي</a></li>
           </ul>
         </li>
-        <li><a href="mylist.html">??????</a></li>
-        <li><a href="search.html">???</a></li>
+        <li><a href="mylist.html">قائمتي</a></li>
+        <li><a href="search.html">بحث</a></li>
       </ul>
     </div>
     <div class="nav-right">
-      <a href="search.html" class="nav-search" title="???"><i class="fas fa-search"></i></a>
+      <a href="search.html" class="nav-search" title="بحث"><i class="fas fa-search"></i></a>
       <div class="nav-profile" title="البروفايل"></div>
       <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </div>
@@ -66,7 +66,7 @@
   <section class="rows-section">
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">??????? ???????</h2></div>
+      <div class="row-header"><h2 class="row-title">الأفلام الأكثر مشاهدة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-popular"></div>
@@ -75,7 +75,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">?????? ???????</h2></div>
+      <div class="row-header"><h2 class="row-title">الأعلى تقييماً</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-top-rated"></div>
@@ -84,7 +84,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">????? ?????? ?? ???????</h2></div>
+      <div class="row-header"><h2 class="row-title">جديد دور العرض</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-now-playing"></div>
@@ -93,7 +93,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???? ??????</h2></div>
+      <div class="row-header"><h2 class="row-title">أفلام قادمة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-upcoming"></div>
@@ -102,7 +102,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">????</h2></div>
+      <div class="row-header"><h2 class="row-title">أكشن</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-action"></div>
@@ -111,7 +111,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???????</h2></div>
+      <div class="row-header"><h2 class="row-title">مغامرة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-adventure"></div>
@@ -120,7 +120,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">??????</h2></div>
+      <div class="row-header"><h2 class="row-title">كوميدي</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-comedy"></div>
@@ -129,7 +129,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???? ????</h2></div>
+      <div class="row-header"><h2 class="row-title">خيال علمي</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-scifi"></div>
@@ -138,7 +138,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">????????</h2></div>
+      <div class="row-header"><h2 class="row-title">فانتازيا</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-fantasy"></div>
@@ -147,7 +147,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">?????</h2></div>
+      <div class="row-header"><h2 class="row-title">إثارة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-thriller"></div>
@@ -156,7 +156,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">?????</h2></div>
+      <div class="row-header"><h2 class="row-title">جريمة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-crime"></div>
@@ -165,7 +165,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???</h2></div>
+      <div class="row-header"><h2 class="row-title">رعب</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-horror"></div>
@@ -174,7 +174,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???????</h2></div>
+      <div class="row-header"><h2 class="row-title">رومانسي</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-romance"></div>
@@ -183,7 +183,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">???? ??????</h2></div>
+      <div class="row-header"><h2 class="row-title">رسوم متحركة</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-animation"></div>
@@ -192,7 +192,7 @@
     </div>
     
     <div class="row">
-      <div class="row-header"><h2 class="row-title">?????</h2></div>
+      <div class="row-header"><h2 class="row-title">عائلي</h2></div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
         <div class="row-content" id="row-family"></div>
@@ -217,7 +217,7 @@
   </div>
 
   <footer class="footer">
-    <p class="footer-copyright">� 2025 Netflix Clone. ???????? ?? TMDB</p>
+    <p class="footer-copyright">© 2025 NETFLIXY. البيانات مقدمة من TMDB</p>
   </footer>
 
   <script src="js/config.js?v=175"></script>

@@ -1,42 +1,36 @@
-# Netflix Clone - Improvements Phase
+# NETFLIXY - Android TV + Mobile Compatibility
 
-## User Requirements
-- [x] Continue Watching shows "الموسم X - الحلقة Y" in Arabic
-- [x] Genre dropdown in navbar
-- [ ] **ALL movie titles in English only** (no Chinese/Korean scripts)
-- [ ] **ALL descriptions in Arabic ONLY** (no English underneath)
-- [ ] **Trailer button for every movie/show** (hero + modal)
-- [ ] **Mobile: episode thumbnails visible** (fix current tight grid)
-- [ ] **Better UI** matching Netflix exactly
-- [ ] Genre dropdown routes to scrolled+highlighted row
-- [ ] No server changes (keep videasy player)
+## Plan Approval
+- [x] User approved Android TV + Mobile optimization plan
 
-## Implementation Steps
+## 1) Audit Existing UI/Control Files
+- [x] Review `css/style.css`
+- [x] Review `css/responsive.css`
+- [x] Review `css/player.css`
+- [x] Review `js/tv-nav.js`
+- [x] Review `js/player.js`
+- [x] Review key pages (`index/movies/tvshows/search/mylist/watch/genre/profiles`)
 
-### 1. Data Layer - Arabic overviews in list endpoints
-- [ ] `js/api.js`: Modify `fetchMultiPage` to fetch both en-US + ar versions and merge overviews as `overview_ar`
-- [ ] `js/api.js`: Keep `getTrending`, `getMoviesByCategory` etc. using the enhanced function
+## 2) Android TV Improvements
+- [x] Unify remote navigation (Arrow keys + Enter + Back/Escape)
+- [x] Improve focus rings for all interactive controls
+- [x] Ensure predictable focus order between nav/rows/modals
+- [x] Prevent focus loss when opening/closing dropdowns and modals
 
-### 2. Utils - Display helpers
-- [ ] `js/utils.js`: Add `getOverview(item)` → returns Arabic overview only (fallback to English only if Arabic missing)
-- [ ] `js/utils.js`: Stricter `getTitle` — always Latin (English), never Chinese/Korean
-- [ ] `js/utils.js`: `openDetailsModal` — remove English overview line, use `getOverview` only
-- [ ] `js/utils.js`: `openDetailsModal` — always show trailer button (fallback YouTube search if no TMDB trailer)
-- [ ] `js/utils.js`: Add hero trailer button helper
+## 3) Mobile Improvements
+- [x] Ensure touch target size >= 44px for controls
+- [x] Improve navbar usability on narrow screens
+- [x] Improve row/card horizontal scrolling behavior
+- [x] Fix text overflow/cutoff issues for Arabic and mixed content
 
-### 3. Hero & Pages - Arabic descriptions
-- [ ] `js/main.js`: Use `getOverview` for hero overview + add trailer button in hero actions
-- [ ] `js/movies.js`: Use `getOverview` for page hero + add trailer button + handle `?genre=` param
-- [ ] `js/tvshows.js`: Same as movies
+## 4) Watch Player Improvements (TV + Mobile)
+- [x] Increase control button size and spacing
+- [x] Improve subtitles readability (Arabic)
+- [ ] Improve fullscreen/orientation behavior
+- [x] Keep controls easy with remote and touch
 
-### 4. Mobile Fixes
-- [ ] `css/player.css`: Ensure `.nf-ep-thumb` visible on small screens (wider + cleaner)
-- [ ] `css/responsive.css`: Audit mobile nav, rows, cards
-
-### 5. UI Polish (Netflix-accurate)
-- [ ] `css/style.css`: Tighter hero meta, refined dropdown, smoother transitions
-- [ ] Trailer button styling (icon + text)
-- [ ] Genre highlighting animation
-
-### 6. Cache Bust
-- [ ] Bump all `?v=140` → `?v=150` in all HTML files
+## 5) Verification
+- [ ] Run JS syntax checks
+- [ ] Review for CSS regressions
+- [ ] Update cache version if needed
+- [ ] Final pass summary

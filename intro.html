@@ -6,7 +6,7 @@
   <title>NETFLIXY</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23E50914' font-weight='900' font-family='Arial Black'>N</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/intro.css?v=177">
+  <link rel="stylesheet" href="css/intro.css?v=178">
 </head>
 <body>
   <div class="intro-container" id="introContainer">
@@ -67,8 +67,10 @@
       </div>
 
       <!-- NETFLIXY wordmark (appears after N) -->
-      <div class="wordmark" id="wordmark">
-        NETFLIX<span class="wordmark-y">Y</span>
+      <!-- dir="ltr" so Latin letters render left-to-right: N-E-T-F-L-I-X-Y
+           which places the Y at the right end of the wordmark -->
+      <div class="wordmark" id="wordmark" dir="ltr">
+        <span class="wordmark-main">NETFLIX</span><span class="wordmark-y">Y</span>
       </div>
 
       <!-- Tagline -->
@@ -81,6 +83,6 @@
     </div>
   </div>
 
-  <script src="js/intro.js?v=177"></script>
+  <script src="js/intro.js?v=178"></script>
 </body>
 </html>

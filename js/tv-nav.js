@@ -55,6 +55,9 @@
         this.scrollIntoView(e.target);
       });
 
+      // Restore focus when modals close or dynamic DOM rerenders happen
+      this.observeModalAndFocusState();
+
       // Mark body so CSS knows TV nav is active
       document.body.classList.add('tv-nav-ready');
 
@@ -68,6 +71,33 @@
           el.setAttribute('tabindex', '0');
         }
       });
+    },
+
+    observeModalAndFocusState() {
+      const focusableSelector = this.FOCUSABLE;
+      const observer = new MutationObserver(() => {
+        const active = document.activeElement;
+        const hasOpenModal = !!document.querySelector('.modal-overlay.active, .modal.active, .trailer-modal.active, .srv-picker-modal');
+        if (hasOpenModal) {
+          const modalFocusable = document.querySelector('.modal.active button, .modal.active a, .modal.active [tabindex], .trailer-modal.active button, .trailer-modal.active a, .trailer-modal.active [tabindex], .srv-picker-modal button, .srv-picker-modal a, .srv-picker-modal [tabindex]');
+          if (modalFocusable && (!active || active === document.body)) {
+            try { modalFocusable.focus(); } catch (e) {}
+          }
+          return;
+        }
+
+        if (!active || active === document.body || !document.contains(active)) {
+          if (this.lastFocused && document.contains(this.lastFocused) && this.isVisible(this.lastFocused)) {
+            try { this.lastFocused.focus(); return; } catch (e) {}
+          }
+          const first = document.querySelector(focusableSelector);
+          if (first) {
+            try { first.focus(); } catch (e) {}
+          }
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
     },
 
     observeChanges() {
@@ -116,15 +146,56 @@
         return;
       }
 
-      // BACK button (Escape or Browser Back)
-      if (key === 'Escape' || key === 'GoBack' || key === 'BrowserBack') {
-        // Close modals first
-        const openModal = document.querySelector('.modal-overlay.active, .modal.active, .modal-overlay[style*="display: flex"]');
+      // BACK button (Escape / Android TV back key aliases / Browser back)
+      if (
+        key === 'Escape' ||
+        key === 'GoBack' ||
+        key === 'BrowserBack' ||
+        key === 'Backspace' ||
+        key === 'XF86Back'
+      ) {
+        const tag = active?.tagName;
+        const isEditable = !!active && (
+          tag === 'INPUT' ||
+          tag === 'TEXTAREA' ||
+          active.isContentEditable
+        );
+
+        // Don't hijack Backspace while typing
+        if (key === 'Backspace' && isEditable) return;
+
+        // Close open UI layers first
+        const openModal = document.querySelector('.srv-picker-modal, .trailer-modal.active, .modal-overlay.active, .modal.active, .modal-overlay[style*="display: flex"]');
         if (openModal) {
           e.preventDefault();
-          const closeBtn = openModal.querySelector('.modal-close, [data-close]');
-          if (closeBtn) closeBtn.click();
-          else openModal.classList.remove('active');
+          const closeBtn = openModal.querySelector('.modal-close, .srv-picker-close, [data-close]');
+          if (closeBtn) {
+            closeBtn.click();
+          } else {
+            openModal.classList.remove('active');
+            if (openModal.classList.contains('srv-picker-modal')) openModal.remove();
+          }
+
+          // restore focus to last valid element
+          setTimeout(() => {
+            if (this.lastFocused && document.contains(this.lastFocused)) {
+              try { this.lastFocused.focus(); } catch (err) {}
+            } else {
+              this.focusInitial();
+            }
+          }, 30);
+          return;
+        }
+
+        // Close mobile nav drawer
+        const navLinks = document.querySelector('.nav-links.active');
+        if (navLinks) {
+          e.preventDefault();
+          navLinks.classList.remove('active');
+          const menuBtn = document.querySelector('.menu-toggle');
+          if (menuBtn) {
+            try { menuBtn.focus(); } catch (err) {}
+          }
           return;
         }
       }
