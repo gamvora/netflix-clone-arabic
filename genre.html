@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>??? | Netflix</title>
+  <title>???? ??? ????? | Netflix</title>
+  <meta name="description" content="???? ????? ???????? ??? ????? - ????? ??????? ???? ??????? ?????">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +14,9 @@
   <link rel="stylesheet" href="css/style.css?v=170">
   <link rel="stylesheet" href="css/responsive.css?v=170">
 </head>
-<body>
+<body class="genre-body">
 
-  <nav class="navbar scrolled">
+  <nav class="navbar">
     <div class="nav-left">
       <a href="index.html" class="logo">NETFLIX</a>
       <ul class="nav-links">
@@ -23,7 +24,7 @@
         <li><a href="tvshows.html">???????</a></li>
         <li><a href="movies.html">?????</a></li>
         <li class="nav-dropdown">
-          <a href="#" class="nav-dropdown-toggle">???? ??? ????? <i class="fas fa-caret-down"></i></a>
+          <a href="#" class="nav-dropdown-toggle active">???? ??? ????? <i class="fas fa-caret-down"></i></a>
           <ul class="nav-dropdown-menu">
             <li><a href="genre.html?type=action"><i class="fas fa-fist-raised"></i>أكشن</a></li>
             <li><a href="genre.html?type=comedy"><i class="fas fa-laugh"></i>كوميدي</a></li>
@@ -46,31 +47,75 @@
           </ul>
         </li>
         <li><a href="mylist.html">??????</a></li>
-        <li><a href="search.html" class="active">???</a></li>
+        <li><a href="search.html">???</a></li>
       </ul>
     </div>
     <div class="nav-right">
+      <a href="search.html" class="nav-search" title="???"><i class="fas fa-search"></i></a>
       <div class="nav-profile">U</div>
       <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </div>
   </nav>
 
-  <div class="search-container">
-    <div class="search-bar-wrap">
-      <input type="text" id="searchInput" class="search-bar" placeholder="???? ?? ????? ?? ???????..." autocomplete="off">
-      <i class="fas fa-search search-icon-big"></i>
-    </div>
-    
-    <div class="search-status" id="searchStatus"></div>
-    
-    <div class="search-results" id="searchResults">
-      <div class="empty-state">
-        <i class="fas fa-search"></i>
-        <h3>???? ?? ?????? ????????? ???????</h3>
-        <p>???? ??? ?????? ?? ??????? ?? ???? ????? ?????</p>
+  <!-- Hero banner showing a featured item for this genre -->
+  <section class="page-hero" id="pageHero"></section>
+
+  <!-- Genre header + genre pills for quick switching -->
+  <section class="genre-header-section">
+    <div class="genre-header">
+      <div class="genre-title-wrap">
+        <i id="genreIcon" class="fas fa-film"></i>
+        <div>
+          <h1 id="genreTitle">???? ??? ?????</h1>
+          <p id="genreSub" class="genre-sub">????? ????????</p>
+        </div>
+      </div>
+      <div class="genre-stats">
+        <span class="genre-stat"><i class="fas fa-film"></i> <span id="countMovies">0</span> ????</span>
+        <span class="genre-stat"><i class="fas fa-tv"></i> <span id="countTV">0</span> ?????</span>
       </div>
     </div>
-  </div>
+    <div class="genre-pills" id="genrePills"></div>
+  </section>
+
+  <section class="rows-section">
+
+    <!-- Movies carousel -->
+    <div class="row genre-section" id="section-genre-movies">
+      <div class="row-header">
+        <h2 class="row-title"><i class="fas fa-film"></i> ??????? ?????? ?????</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-genre-movies"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+
+    <!-- TV carousel -->
+    <div class="row genre-section" id="section-genre-tv">
+      <div class="row-header">
+        <h2 class="row-title"><i class="fas fa-tv"></i> ????????? ?????? ?????</h2>
+      </div>
+      <div class="row-wrapper">
+        <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
+        <div class="row-content" id="row-genre-tv"></div>
+        <button class="scroll-btn scroll-right"><i class="fas fa-chevron-left"></i></button>
+      </div>
+    </div>
+
+    <!-- Full grids -->
+    <div class="genre-grid-section">
+      <h2 class="grid-title"><i class="fas fa-film"></i> ???? ???????</h2>
+      <div class="genre-grid" id="grid-genre-movies"></div>
+    </div>
+
+    <div class="genre-grid-section">
+      <h2 class="grid-title"><i class="fas fa-tv"></i> ???? ?????????</h2>
+      <div class="genre-grid" id="grid-genre-tv"></div>
+    </div>
+
+  </section>
 
   <div class="modal" id="detailsModal">
     <div class="modal-content">
@@ -78,7 +123,7 @@
       <div class="modal-body"></div>
     </div>
   </div>
-  
+
   <div class="trailer-modal" id="trailerModal">
     <div class="trailer-content">
       <button class="modal-close" style="position: absolute; top: 10px; right: 10px; z-index: 10;"><i class="fas fa-times"></i></button>
@@ -86,10 +131,14 @@
     </div>
   </div>
 
+  <footer class="footer">
+    <p class="footer-copyright">� 2025 Netflix Clone. ???????? ?? TMDB</p>
+  </footer>
+
   <script src="js/config.js?v=170"></script>
   <script src="js/api.js?v=170"></script>
   <script src="js/utils.js?v=170"></script>
-  <script src="js/search.js?v=170"></script>
+  <script src="js/genre.js?v=170"></script>
   <script src="js/tv-nav.js?v=170"></script>
 </body>
 </html>

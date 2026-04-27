@@ -96,6 +96,22 @@ const API = {
     return this.fetchBilingual(ENDPOINTS[category], pages);
   },
 
+  // Fetch both movies + TV shows for a given genre key (used by genre.html)
+  async getGenreContent(genreKey, pages = 3) {
+    const genre = (typeof GENRE_MAP !== 'undefined') ? GENRE_MAP[genreKey] : null;
+    if (!genre) return { movies: [], tv: [], genre: null };
+    const movieUrl = buildGenreUrl(genreKey, 'movie');
+    const tvUrl = buildGenreUrl(genreKey, 'tv');
+    const [movies, tv] = await Promise.all([
+      movieUrl ? this.fetchBilingual(movieUrl, pages) : Promise.resolve([]),
+      tvUrl ? this.fetchBilingual(tvUrl, pages) : Promise.resolve([])
+    ]);
+    // Ensure media_type is correctly set (discover endpoints don't always return it)
+    movies.forEach(m => { if (!m.media_type) m.media_type = 'movie'; });
+    tv.forEach(t => { if (!t.media_type) t.media_type = 'tv'; });
+    return { movies, tv, genre };
+  },
+
   // Movie details - English primary, Arabic overview supplement
   async getMovieDetails(id) {
     const enData = await this.fetchData(`${ENDPOINTS.movieDetails(id)}&language=${CONFIG.LANGUAGE}`);

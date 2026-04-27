@@ -70,3 +70,35 @@ const ENDPOINTS = {
   // Search
   searchMulti: (query) => `/search/multi?api_key=${CONFIG.API_KEY}&${L}&query=${encodeURIComponent(query)}&include_adult=false`
 };
+
+// Unified genre map: one key → movie filter + TV filter + Arabic label + icon
+// Used by genre.html to show BOTH movies and TV shows of the chosen genre.
+const GENRE_MAP = {
+  action:      { ar: 'أكشن',          en: 'Action',          movie: 'with_genres=28',    tv: 'with_genres=10759', icon: 'fa-fist-raised' },
+  comedy:      { ar: 'كوميدي',        en: 'Comedy',          movie: 'with_genres=35',    tv: 'with_genres=35',    icon: 'fa-laugh' },
+  horror:      { ar: 'رعب',           en: 'Horror',          movie: 'with_genres=27',    tv: 'with_genres=9648',  icon: 'fa-ghost' },
+  romance:     { ar: 'رومانسي',       en: 'Romance',         movie: 'with_genres=10749', tv: 'with_genres=18',    icon: 'fa-heart' },
+  scifi:       { ar: 'خيال علمي',     en: 'Sci-Fi',          movie: 'with_genres=878',   tv: 'with_genres=10765', icon: 'fa-rocket' },
+  thriller:    { ar: 'إثارة',         en: 'Thriller',        movie: 'with_genres=53',    tv: 'with_genres=80',    icon: 'fa-user-secret' },
+  animation:   { ar: 'رسوم متحركة',   en: 'Animation',       movie: 'with_genres=16',    tv: 'with_genres=16',    icon: 'fa-magic' },
+  documentary: { ar: 'وثائقي',        en: 'Documentary',     movie: 'with_genres=99',    tv: 'with_genres=99',    icon: 'fa-film' },
+  crime:       { ar: 'جريمة',         en: 'Crime',           movie: 'with_genres=80',    tv: 'with_genres=80',    icon: 'fa-mask' },
+  drama:       { ar: 'دراما',         en: 'Drama',           movie: 'with_genres=18',    tv: 'with_genres=18',    icon: 'fa-theater-masks' },
+  fantasy:     { ar: 'خيال',          en: 'Fantasy',         movie: 'with_genres=14',    tv: 'with_genres=10765', icon: 'fa-hat-wizard' },
+  adventure:   { ar: 'مغامرة',        en: 'Adventure',       movie: 'with_genres=12',    tv: 'with_genres=10759', icon: 'fa-compass' },
+  family:      { ar: 'عائلي',         en: 'Family',          movie: 'with_genres=10751', tv: 'with_genres=10751', icon: 'fa-users' },
+  mystery:     { ar: 'غموض',          en: 'Mystery',         movie: 'with_genres=9648',  tv: 'with_genres=9648',  icon: 'fa-search' },
+  war:         { ar: 'حرب',           en: 'War',             movie: 'with_genres=10752', tv: 'with_genres=10768', icon: 'fa-shield-alt' },
+  korean:      { ar: 'كوري',          en: 'Korean',          movie: 'with_original_language=ko', tv: 'with_original_language=ko', icon: 'fa-star' },
+  anime:       { ar: 'أنمي',          en: 'Anime',           movie: 'with_genres=16&with_original_language=ja', tv: 'with_genres=16&with_original_language=ja', icon: 'fa-dragon' },
+  arabic:      { ar: 'عربي',          en: 'Arabic',          movie: 'with_original_language=ar', tv: 'with_original_language=ar', icon: 'fa-mosque' }
+};
+
+// Build TMDB discover URL for a given genre key + media type
+function buildGenreUrl(genreKey, mediaType /* 'movie' | 'tv' */) {
+  const g = GENRE_MAP[genreKey];
+  if (!g) return null;
+  const filter = g[mediaType];
+  if (!filter) return null;
+  return `/discover/${mediaType}?api_key=${CONFIG.API_KEY}&${L}&${filter}&sort_by=popularity.desc`;
+}
