@@ -12,11 +12,11 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'vidsrc',
-    name: 'VidSrc',
+    id: 'twoembed',
+    name: '2Embed',
     nameAr: 'السيرفر 2',
-    movieUrl: (id) => `https://vidsrc.xyz/embed/movie?tmdb=${id}&ds_lang=ar&autoplay=1&autostart=1`,
-    tvUrl: (id, s, e) => `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}&ds_lang=ar&autoplay=1&autostart=1`
+    movieUrl: (id) => `https://www.2embed.cc/embed/${id}?lang=ar&autoplay=1`,
+    tvUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}&lang=ar&autoplay=1`
   }
 ];
 
