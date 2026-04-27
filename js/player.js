@@ -12,13 +12,12 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'mycima',
-    name: 'MyCima',
-    nameAr: 'السيرفر 2 (سيما)',
-    external: true,
-    // MyCima search URL — opens in a NEW TAB (can't be embedded due to X-Frame-Options)
-    movieUrl: (id, title) => `https://w20.my-cima.net/search/${encodeURIComponent(title || '')}/`,
-    tvUrl: (id, s, e, title) => `https://w20.my-cima.net/search/${encodeURIComponent(title || '')}/`
+    id: 'vidsrcto',
+    name: 'VidSrc',
+    nameAr: 'السيرفر 2',
+    // vidsrc.to — direct player, accepts TMDB id, Arabic subtitle preference, opens video immediately
+    movieUrl: (id) => `https://vidsrc.to/embed/movie/${id}?ds_lang=ar`,
+    tvUrl: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}?ds_lang=ar`
   }
 ];
 
@@ -59,9 +58,8 @@ const Player = {
 
   buildUrl(type, id, season, episode, serverId) {
     const server = this.getServer(serverId || this.currentServerId);
-    const title = this.currentDetails ? (Utils.getTitle(this.currentDetails) || '') : '';
-    if (type === 'tv') return server.tvUrl(id, season, episode, title);
-    return server.movieUrl(id, title);
+    if (type === 'tv') return server.tvUrl(id, season, episode);
+    return server.movieUrl(id);
   },
 
   async init() {
@@ -255,52 +253,8 @@ const Player = {
     const wrapper = document.getElementById('playerWrapper');
     const streamUrl = this.buildUrl(this.currentType, this.currentId, this.currentSeason, this.currentEpisode);
     const currentServer = this.getServer(this.currentServerId);
-    const title = this.currentDetails ? (Utils.getTitle(this.currentDetails) || '') : '';
 
-    // External server (e.g. MyCima): open in a new tab — no iframe embedding
-    if (currentServer.external) {
-      wrapper.innerHTML = `
-        <div class="nf-player video-only" id="nfPlayer" style="background:#000;display:flex;align-items:center;justify-content:center;">
-          <div class="nf-external-screen" style="max-width:640px;padding:48px 32px;text-align:center;color:#fff;">
-            <div style="font-size:64px;color:#e50914;margin-bottom:16px;">
-              <i class="fas fa-external-link-alt"></i>
-            </div>
-            <h2 style="font-size:28px;margin-bottom:12px;font-weight:700;">${currentServer.nameAr}</h2>
-            <p style="font-size:16px;color:#b3b3b3;line-height:1.8;margin-bottom:28px;">
-              هذا السيرفر يفتح في <strong style="color:#fff;">تبويب جديد</strong> لأنه موقع خارجي لا يدعم التضمين.<br>
-              ابحث عن: <strong style="color:#e50914;">${title}</strong>
-            </p>
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-              <a href="${streamUrl}" target="_blank" rel="noopener noreferrer" id="openExternalBtn"
-                 style="display:inline-flex;align-items:center;gap:10px;background:#e50914;color:#fff;padding:14px 32px;border-radius:4px;text-decoration:none;font-size:16px;font-weight:600;transition:background .2s;">
-                <i class="fas fa-play"></i> فتح السيرفر 2 في تبويب جديد
-              </a>
-              <a href="index.html" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.15);color:#fff;padding:14px 32px;border-radius:4px;text-decoration:none;font-size:16px;font-weight:600;">
-                <i class="fas fa-arrow-right"></i> عودة
-              </a>
-            </div>
-            <p style="margin-top:24px;font-size:13px;color:#808080;">
-              💡 جرّب السيرفر 1 (Videasy) إذا أردت المشاهدة داخل الموقع
-            </p>
-          </div>
-        </div>
-      `;
-
-      // Try to auto-open in a new tab (may be blocked by popup blocker — that's why we also show the button)
-      setTimeout(() => {
-        try {
-          const w = window.open(streamUrl, '_blank', 'noopener,noreferrer');
-          if (!w) console.log('Popup blocked — user must click the button manually');
-        } catch (e) {
-          console.warn('Auto-open blocked:', e);
-        }
-      }, 400);
-
-      this.attachKeyboardShortcuts();
-      return;
-    }
-
-    // Regular embeddable server (iframe)
+    // Embeddable server (iframe) — opens video directly
     wrapper.innerHTML = `
       <div class="nf-player video-only" id="nfPlayer">
         <div class="nf-loader" id="nfLoader">
