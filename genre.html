@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>???? ??? ????? | Netflix</title>
-  <meta name="description" content="???? ????? ???????? ??? ????? - ????? ??????? ???? ??????? ?????">
+  <title>اختر نوع المحتوى | Netflix</title>
+  <meta name="description" content="تصفح المحتوى حسب النوع - أفلام ومسلسلات لكل الأذواق معاً">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,11 +20,11 @@
     <div class="nav-left">
       <a href="index.html" class="logo">NETFLIX</a>
       <ul class="nav-links">
-        <li><a href="index.html">????????</a></li>
-        <li><a href="tvshows.html">???????</a></li>
-        <li><a href="movies.html">?????</a></li>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="tvshows.html">مسلسلات</a></li>
+        <li><a href="movies.html">أفلام</a></li>
         <li class="nav-dropdown">
-          <a href="#" class="nav-dropdown-toggle active">???? ??? ????? <i class="fas fa-caret-down"></i></a>
+          <a href="#" class="nav-dropdown-toggle active">تصفح حسب النوع <i class="fas fa-caret-down"></i></a>
           <ul class="nav-dropdown-menu">
             <li><a href="genre.html?type=action"><i class="fas fa-fist-raised"></i>أكشن</a></li>
             <li><a href="genre.html?type=comedy"><i class="fas fa-laugh"></i>كوميدي</a></li>
@@ -46,12 +46,12 @@
             <li><a href="genre.html?type=arabic"><i class="fas fa-moon"></i>عربي</a></li>
           </ul>
         </li>
-        <li><a href="mylist.html">??????</a></li>
-        <li><a href="search.html">???</a></li>
+        <li><a href="mylist.html">قائمتي</a></li>
+        <li><a href="search.html">بحث</a></li>
       </ul>
     </div>
     <div class="nav-right">
-      <a href="search.html" class="nav-search" title="???"><i class="fas fa-search"></i></a>
+      <a href="search.html" class="nav-search" title="بحث"><i class="fas fa-search"></i></a>
       <div class="nav-profile">U</div>
       <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </div>
@@ -66,13 +66,13 @@
       <div class="genre-title-wrap">
         <i id="genreIcon" class="fas fa-film"></i>
         <div>
-          <h1 id="genreTitle">???? ??? ?????</h1>
-          <p id="genreSub" class="genre-sub">????? ????????</p>
+          <h1 id="genreTitle">اختر نوع المحتوى</h1>
+          <p id="genreSub" class="genre-sub">أفلام ومسلسلات معاً لكل الأذواق</p>
         </div>
       </div>
       <div class="genre-stats">
-        <span class="genre-stat"><i class="fas fa-film"></i> <span id="countMovies">0</span> ????</span>
-        <span class="genre-stat"><i class="fas fa-tv"></i> <span id="countTV">0</span> ?????</span>
+        <span class="genre-stat"><i class="fas fa-film"></i> <span id="countMovies">0</span> فيلم</span>
+        <span class="genre-stat"><i class="fas fa-tv"></i> <span id="countTV">0</span> مسلسل</span>
       </div>
     </div>
     <div class="genre-pills" id="genrePills"></div>
@@ -83,7 +83,7 @@
     <!-- Movies carousel -->
     <div class="row genre-section" id="section-genre-movies">
       <div class="row-header">
-        <h2 class="row-title"><i class="fas fa-film"></i> ??????? ?????? ?????</h2>
+        <h2 class="row-title"><i class="fas fa-film"></i> أفلام من هذا النوع</h2>
       </div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
@@ -95,7 +95,7 @@
     <!-- TV carousel -->
     <div class="row genre-section" id="section-genre-tv">
       <div class="row-header">
-        <h2 class="row-title"><i class="fas fa-tv"></i> ????????? ?????? ?????</h2>
+        <h2 class="row-title"><i class="fas fa-tv"></i> مسلسلات من هذا النوع</h2>
       </div>
       <div class="row-wrapper">
         <button class="scroll-btn scroll-left"><i class="fas fa-chevron-right"></i></button>
@@ -106,12 +106,12 @@
 
     <!-- Full grids -->
     <div class="genre-grid-section">
-      <h2 class="grid-title"><i class="fas fa-film"></i> ???? ???????</h2>
+      <h2 class="grid-title"><i class="fas fa-film"></i> جميع الأفلام</h2>
       <div class="genre-grid" id="grid-genre-movies"></div>
     </div>
 
     <div class="genre-grid-section">
-      <h2 class="grid-title"><i class="fas fa-tv"></i> ???? ?????????</h2>
+      <h2 class="grid-title"><i class="fas fa-tv"></i> جميع المسلسلات</h2>
       <div class="genre-grid" id="grid-genre-tv"></div>
     </div>
 
@@ -132,7 +132,7 @@
   </div>
 
   <footer class="footer">
-    <p class="footer-copyright">� 2025 Netflix Clone. ???????? ?? TMDB</p>
+    <p class="footer-copyright">© 2025 Netflix Clone. البيانات من TMDB</p>
   </footer>
 
   <script src="js/config.js?v=170"></script>
