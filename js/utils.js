@@ -61,11 +61,12 @@ const Utils = {
     const episode = opts.episode || null;
 
     // Default server preference from localStorage (Videasy if nothing saved)
+    const VALID_SERVERS = ['videasy', '111movies'];
     let defaultServer = 'videasy';
     try {
       const saved = localStorage.getItem(`netflixServer_${type}_${id}`)
                  || localStorage.getItem('netflixDefaultServer');
-      if (saved === 'videasy' || saved === 'vidjoy') defaultServer = saved;
+      if (VALID_SERVERS.includes(saved)) defaultServer = saved;
     } catch {}
 
     // Remove existing picker if present
@@ -98,14 +99,14 @@ const Utils = {
             </div>
             <i class="fas fa-chevron-left srv-picker-chev"></i>
           </button>
-          <button class="srv-picker-option ${defaultServer === 'vidjoy' ? 'recommended' : ''}" data-server="vidjoy">
+          <button class="srv-picker-option ${defaultServer === '111movies' ? 'recommended' : ''}" data-server="111movies">
             <div class="srv-picker-opt-icon"><i class="fas fa-globe"></i></div>
             <div class="srv-picker-opt-body">
               <div class="srv-picker-opt-title">
                 <span>السيرفر 2</span>
                 <span class="srv-picker-badge alt">بديل</span>
               </div>
-              <div class="srv-picker-opt-desc">محتوى عالمي • تركي • آسيوي مع ترجمة</div>
+              <div class="srv-picker-opt-desc">مشغّل مختلف • جودة عالية • بديل قوي</div>
             </div>
             <i class="fas fa-chevron-left srv-picker-chev"></i>
           </button>

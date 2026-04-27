@@ -12,13 +12,13 @@ const SERVERS = [
     tvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?color=e50914&autoplay=true&autostart=true&mute=0&subtitle=ar&sub=ar&defaultSubtitle=ar&lang=ar&nextEpisode=true&episodeSelector=true&autoNextEpisode=true`
   },
   {
-    id: 'vidjoy',
-    name: 'Vidjoy',
+    id: '111movies',
+    name: '111Movies',
     nameAr: 'السيرفر 2',
-    host: 'vidjoy.pro',
-    // vidjoy.pro — direct iframe player, distinct UI from Videasy, accepts TMDB id
-    movieUrl: (id) => `https://vidjoy.pro/embed/movie/${id}?autoplay=true&lang=ar&sub=ar`,
-    tvUrl: (id, s, e) => `https://vidjoy.pro/embed/tv/${id}/${s}/${e}?autoplay=true&lang=ar&sub=ar`
+    host: '111movies.com',
+    // 111movies.com — Next.js + FluidPlayer, distinct UI/brand from Videasy, full TMDB integration
+    movieUrl: (id) => `https://111movies.com/movie/${id}`,
+    tvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}`
   }
 ];
 
@@ -29,6 +29,10 @@ const Player = {
   currentSeason: 1,
   currentEpisode: 1,
   currentServerId: 'videasy',
+
+  getAllServerIds() {
+    return SERVERS.map(s => s.id);
+  },
 
   getServerKey() {
     return `netflixServer_${this.currentType}_${this.currentId}`;
