@@ -483,7 +483,9 @@ const Utils = {
           <h1>${title}</h1>
           ${showArTitle ? `<div class="modal-ar-title">${titleAr}</div>` : ''}
           <div class="modal-actions">
-            <button class="btn btn-primary btn-play-modal" data-id="${id}" data-type="${type}"><i class="fas fa-play"></i> تشغيل</button>
+            ${type === 'movie' ? `
+              <button class="btn btn-primary btn-play-modal" data-id="${id}" data-type="${type}"><i class="fas fa-play"></i> تشغيل</button>
+            ` : ''}
             ${showResume ? `
               <button class="btn btn-resume btn-resume-modal" data-id="${id}" data-type="${type}" data-season="${resumeSeason}" data-episode="${resumeEpisode}">
                 <i class="fas fa-redo"></i> ${resumeLabel}
@@ -652,21 +654,15 @@ const Utils = {
             `;
           }).join('');
 
-          // Episode click → go to watch.html with selected episode
+          // Episode click → open server picker with selected season/episode
           epListEl.querySelectorAll('.modal-ep-item').forEach(item => {
             item.addEventListener('click', () => {
-              const s = item.dataset.season;
-              const e = item.dataset.episode;
-              let pref = 'videasy';
-              try {
-                pref = localStorage.getItem(`netflixServer_tv_${id}`)
-                    || localStorage.getItem('netflixDefaultServer')
-                    || 'videasy';
-              } catch {}
+              const s = parseInt(item.dataset.season, 10);
+              const e = parseInt(item.dataset.episode, 10);
               const dm = document.getElementById('detailsModal');
               if (dm) dm.classList.remove('active');
               document.body.style.overflow = '';
-              window.location.assign(`watch.html?id=${id}&type=tv&s=${s}&e=${e}&server=${pref}&autoplay=1`);
+              this.showServerPicker({ id, type: 'tv', season: s, episode: e });
             });
           });
         } catch (err) {

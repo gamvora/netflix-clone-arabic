@@ -101,19 +101,13 @@ const Player = {
       return this.showError('خطأ في الاتصال بالخادم');
     }
 
-    const continueList = Utils.getContinueWatching ? Utils.getContinueWatching() : [];
-    const isResuming = continueList.some(x => String(x.id) === String(id) && x.type === type);
-
-    if (type === 'tv' && !params.get('e') && !isResuming) {
+    // For TV shows: if no specific episode in URL → ALWAYS show the episode picker
+    // so the user can browse and choose (like clicking a regular card).
+    // Direct resume is handled by the "متابعة المشاهدة" green button which
+    // passes &s= and &e= explicitly in the URL.
+    if (type === 'tv' && !params.get('e')) {
       this.renderEpisodePicker();
     } else {
-      if (type === 'tv' && !params.get('e') && isResuming) {
-        const saved = continueList.find(x => String(x.id) === String(id) && x.type === type);
-        if (saved && saved.season && saved.episode) {
-          this.currentSeason = saved.season;
-          this.currentEpisode = saved.episode;
-        }
-      }
       this.renderPlayer();
       this.saveToContinueWatching();
       this.progressInterval = setInterval(() => this.saveToContinueWatching(), 30000);
