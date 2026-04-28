@@ -1,0 +1,529 @@
+/* ============================================================
+   NETFLIX POLISH LAYER v1
+   Premium animations & visual refinements
+   Applied on top of style.css/responsive.css without breaking
+   existing layout. Load LAST.
+   ============================================================ */
+
+/* ---------- Global typography & rendering ---------- */
+html, body {
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  background: radial-gradient(ellipse at top, #181818 0%, #0a0a0a 100%) fixed;
+}
+
+/* Premium scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#2a2a2a, #3a3a3a);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(#e50914, #b20710);
+  box-shadow: 0 0 8px rgba(229,9,20,0.5);
+}
+
+/* ---------- Global page fade-in ---------- */
+main, .rows-section, .search-container, .page-title-section, .page-hero,
+.genre-header-section, .genre-grid-section {
+  animation: pagePolishFadeIn 0.55s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes pagePolishFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Navbar polish ---------- */
+.navbar {
+  padding: 14px 4vw;
+  transition: background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+}
+.navbar.scrolled {
+  background: rgba(10,10,10,0.86) !important;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55);
+}
+
+.navbar .logo {
+  filter: drop-shadow(0 2px 6px rgba(229,9,20,0.35));
+}
+
+.nav-links a {
+  position: relative;
+  padding: 6px 2px;
+  transition: color .2s ease;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e50914, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .3s ease;
+  border-radius: 2px;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
+
+.nav-links a:hover { color: #fff !important; }
+
+/* Search icon glow */
+.nav-search:hover {
+  background: rgba(229,9,20,0.15) !important;
+  box-shadow: 0 0 12px rgba(229,9,20,0.25);
+}
+
+/* Profile avatar ring on hover */
+.nav-profile {
+  box-shadow: 0 0 0 2px transparent;
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+.nav-profile:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 18px rgba(229,9,20,0.4);
+}
+
+/* ---------- Hero polish ---------- */
+.hero {
+  /* extra cinematic vignette */
+  box-shadow: inset 0 -150px 150px -40px #0a0a0a;
+}
+.hero::before {
+  background:
+    linear-gradient(77deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0) 90%),
+    radial-gradient(ellipse at 80% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 80%) !important;
+}
+.hero-content {
+  animation: heroSlideIn 1s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-title {
+  background: linear-gradient(180deg, #fff 0%, #e5e5e5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
+  animation: heroTitleFade .9s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-overview {
+  animation: heroFadeUp 1.1s .15s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-actions {
+  animation: heroFadeUp 1.2s .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-meta {
+  animation: heroFadeUp 1s .1s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes heroSlideIn {
+  from { opacity: 0; transform: translateX(-24px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+@keyframes heroTitleFade {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Buttons polish (Netflix feel) ---------- */
+.btn {
+  letter-spacing: 0.2px;
+  transition: transform .18s ease, background .18s ease, box-shadow .2s ease, color .18s ease;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(.98); }
+
+.btn-primary {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 4px 14px rgba(255,255,255,0.08);
+}
+.btn-primary:hover {
+  background: #fff !important;
+  color: #000 !important;
+  box-shadow: 0 10px 30px rgba(255,255,255,0.22);
+}
+
+.btn-secondary {
+  background: rgba(109,109,110,0.55) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn-secondary:hover {
+  background: rgba(109,109,110,0.8) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.btn-netflix {
+  background: linear-gradient(180deg, #f40612 0%, #c7010b 100%) !important;
+  box-shadow: 0 6px 16px rgba(229,9,20,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.btn-netflix:hover {
+  background: linear-gradient(180deg, #ff1925 0%, #e50914 100%) !important;
+  box-shadow: 0 10px 28px rgba(229,9,20,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.btn-circle {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform .18s ease, border-color .2s ease, background .2s ease;
+}
+.btn-circle:hover { transform: scale(1.08); }
+
+/* ---------- Rows staggered entrance ---------- */
+.row {
+  transition: opacity .6s ease, transform .6s ease;
+}
+.row.visible:nth-child(1) { transition-delay: .02s; }
+.row.visible:nth-child(2) { transition-delay: .08s; }
+.row.visible:nth-child(3) { transition-delay: .14s; }
+.row.visible:nth-child(4) { transition-delay: .20s; }
+.row.visible:nth-child(5) { transition-delay: .26s; }
+.row.visible:nth-child(6) { transition-delay: .32s; }
+.row.visible:nth-child(n+7) { transition-delay: .38s; }
+
+.row-title {
+  letter-spacing: 0.3px;
+}
+.row-title::before {
+  background: linear-gradient(180deg, #ff2a36, #b20710);
+  box-shadow: 0 0 10px rgba(229,9,20,0.55);
+}
+
+/* Row scroll buttons polish */
+.scroll-btn {
+  background: linear-gradient(
+    90deg,
+    rgba(10,10,10,0.9) 0%,
+    rgba(10,10,10,0.65) 60%,
+    rgba(10,10,10,0) 100%
+  ) !important;
+  font-size: 28px !important;
+  transition: background .25s ease, opacity .25s ease;
+}
+.scroll-btn.scroll-right {
+  background: linear-gradient(
+    270deg,
+    rgba(10,10,10,0.9) 0%,
+    rgba(10,10,10,0.65) 60%,
+    rgba(10,10,10,0) 100%
+  ) !important;
+}
+.scroll-btn:hover {
+  background: linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.8) 100%) !important;
+}
+
+/* ---------- Card polish (Netflix-accurate hover) ---------- */
+.card {
+  transition:
+    transform .32s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease,
+    z-index 0s;
+  border-radius: 6px;
+  background: #0f0f0f;
+}
+.card::before {
+  /* subtle inner glow while hovered */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 0 rgba(229,9,20,0);
+  transition: box-shadow .3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+.card:hover {
+  transform: scale(1.14) translateY(-6px);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(255,255,255,0.08);
+}
+.card:hover::before {
+  box-shadow: inset 0 0 0 2px rgba(229,9,20,0.35);
+}
+.card-img-wrap img {
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+}
+.card:hover .card-img-wrap img {
+  transform: scale(1.06);
+  filter: brightness(1.05) saturate(1.08);
+}
+.card-play-hover i {
+  box-shadow: 0 8px 24px rgba(229,9,20,0.55);
+}
+
+/* Smooth card fade in on load */
+.card { animation: cardAppear .5s ease both; }
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card info polish */
+.card-info {
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.55) 45%,
+    rgba(0,0,0,0.95) 100%
+  );
+  padding: 14px 12px 10px;
+}
+.card-info h3 { letter-spacing: 0.2px; }
+.btn-icon {
+  transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+}
+.btn-icon:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* HD badge polish */
+.hd-badge {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: linear-gradient(135deg, rgba(229,9,20,0.95), rgba(178,7,16,0.95));
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+
+/* ---------- Search polish ---------- */
+.search-bar {
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.search-bar:focus {
+  background: #111 !important;
+  box-shadow:
+    0 0 0 3px rgba(229,9,20,0.25),
+    0 8px 28px rgba(229,9,20,0.2) !important;
+}
+
+.search-results .card {
+  animation: cardAppear .5s ease both;
+}
+
+/* ---------- Modal polish ---------- */
+.modal {
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+}
+.modal-content {
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(255,255,255,0.05);
+}
+.modal-hero {
+  position: relative;
+}
+.modal-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(24,24,24,0) 0%,
+    rgba(24,24,24,0.25) 60%,
+    #181818 100%
+  );
+  pointer-events: none;
+}
+.modal-close {
+  transition: transform .25s ease, background .2s ease;
+}
+.modal-close:hover {
+  background: #e50914 !important;
+  box-shadow: 0 0 16px rgba(229,9,20,0.6);
+}
+
+/* ---------- Hero indicators polish ---------- */
+.hero-indicators {
+  background: linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15)) !important;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+}
+.indicator.active {
+  box-shadow: 0 0 14px rgba(229,9,20,0.8) !important;
+}
+
+/* ---------- Page hero / title polish ---------- */
+.page-title {
+  background: linear-gradient(90deg, #fff, #bdbdbd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 80%);
+}
+
+/* ---------- Genre page polish ---------- */
+.genre-title-wrap > i {
+  box-shadow: 0 8px 24px rgba(229,9,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.genre-stat {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+.genre-stat:hover {
+  background: rgba(229,9,20,0.12);
+  border-color: rgba(229,9,20,0.4);
+  transform: translateY(-1px);
+}
+
+.genre-pill {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.genre-pill:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(229,9,20,0.25);
+}
+.genre-pill.active {
+  box-shadow: 0 8px 22px rgba(229,9,20,0.55), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+/* ---------- My List status polish ---------- */
+.mylist-status {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)) !important;
+}
+
+/* ---------- Footer polish ---------- */
+.footer {
+  background: linear-gradient(180deg, #0a0a0a, #000);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-top a {
+  transition: color .2s ease, transform .2s ease;
+}
+.footer-top a:hover { transform: translateY(-2px); }
+
+/* ---------- Server picker modal polish ---------- */
+.srv-picker-box {
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(229,9,20,0.25),
+    0 0 40px rgba(229,9,20,0.08) !important;
+}
+.srv-picker-option {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------- Toast polish ---------- */
+.toast {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(30,30,30,0.92) !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+/* ---------- Loader polish ---------- */
+.main-loader {
+  background: radial-gradient(ellipse at center, #141414 0%, #000 100%);
+}
+.main-loader .loader-logo {
+  text-shadow:
+    0 0 20px rgba(229,9,20,0.8),
+    0 0 40px rgba(229,9,20,0.5),
+    0 0 80px rgba(229,9,20,0.3);
+  animation: loaderPulse 1.6s ease infinite;
+}
+@keyframes loaderPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50%      { transform: scale(1.06); filter: brightness(1.15); }
+}
+.main-loader .loader-bar::after {
+  background: linear-gradient(90deg, transparent, #e50914, transparent);
+  box-shadow: 0 0 10px rgba(229,9,20,0.6);
+}
+
+/* ---------- Continue watching polish ---------- */
+.card-continue {
+  transition: transform .25s ease;
+}
+.card-continue:hover {
+  transform: translateY(-4px);
+}
+.continue-play {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.continue-play:hover {
+  box-shadow: 0 10px 28px rgba(229,9,20,0.5);
+}
+.continue-progress-bar {
+  box-shadow: 0 0 8px rgba(229,9,20,0.7);
+}
+
+/* ---------- Similar cards polish ---------- */
+.sim-card {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.sim-card:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.6);
+}
+
+/* ---------- Skeleton shimmer (optional) ---------- */
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 6px;
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ---------- Focus polish (a11y + TV) ---------- */
+*:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(229,9,20,0.35);
+}
+
+/* ---------- Reduced motion support ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Mobile tweaks ---------- */
+@media (max-width: 768px) {
+  .navbar { padding: 12px 16px; }
+  .hero { padding: 0 20px; }
+  .hero-content { min-width: 0; max-width: 100%; }
+  .row { padding: 0 16px; }
+  .card:hover { transform: scale(1.05); }
+  .scroll-btn { display: none !important; }
+}
