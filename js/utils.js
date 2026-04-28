@@ -168,20 +168,14 @@ const Utils = {
       <div class="card" data-id="${id}" data-type="${mediaType}" tabindex="0" style="animation-delay: ${index * 0.04}s">
         <div class="card-img-wrap">
           <img src="${poster}" alt="${title}" loading="lazy" onerror="this.src='${CONFIG.DEFAULT_POSTER}'">
-          <div class="card-play-hover"><i class="fas fa-play"></i></div>
-        </div>
-        <div class="card-info">
-          <h3>${title}</h3>
-          <div class="card-meta">
-            <span class="rating"><i class="fas fa-star"></i> ${rating}</span>
-            <span class="year">${year}</span>
-            <span class="hd-badge">HD</span>
-          </div>
-          <div class="card-buttons">
-            <button class="btn-icon btn-play" title="تشغيل"><i class="fas fa-play"></i></button>
-            <button class="btn-icon btn-add" title="أضف لقائمتي"><i class="fas fa-plus"></i></button>
-            <button class="btn-icon btn-trailer-card" title="الإعلان الدعائي"><i class="fas fa-film"></i></button>
-            <button class="btn-icon btn-info" title="مزيد من المعلومات"><i class="fas fa-chevron-down"></i></button>
+          <span class="hd-badge">HD</span>
+          <div class="card-hover-overlay">
+            <h3 class="card-hover-title">${title}</h3>
+            <div class="card-hover-meta">
+              <span class="year">${year}</span>
+              <span class="dot">•</span>
+              <span class="rating"><i class="fas fa-star"></i> ${rating}</span>
+            </div>
           </div>
         </div>
       </div>`;

@@ -1,0 +1,167 @@
+/* ==================== CARDS - NETFLIX STYLE HOVER (v186) ==================== */
+
+/* Hide legacy elements that used to be inside the card */
+.card .card-info,
+.card .card-buttons,
+.card .card-play-hover { display: none !important; }
+
+/* Continue Watching card keeps its own info block (different layout) */
+.card-continue .card-info { display: block !important; }
+.card-continue .card-hover-overlay { display: none !important; }
+
+/* ---------- Base card ---------- */
+.card {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #141414;
+  cursor: pointer;
+  transition:
+    transform 320ms cubic-bezier(0.2, 0.6, 0.2, 1),
+    box-shadow 320ms ease;
+  will-change: transform;
+  outline: none;
+}
+
+.card .card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.card .card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 500ms ease;
+}
+
+/* ---------- HD badge (top-left corner) ---------- */
+.card .hd-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg, #e50914, #b00710);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  z-index: 3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Hover overlay (hidden by default) ---------- */
+.card .card-hover-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 12px 12px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.8) 45%,
+    rgba(0, 0, 0, 0.3) 85%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 260ms ease, transform 260ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card .card-hover-title {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card .card-hover-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #d7d7d7;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.card .card-hover-meta .year   { color: #b8b8b8; }
+.card .card-hover-meta .dot    { color: #7a7a7a; }
+.card .card-hover-meta .rating {
+  color: #f5c518;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.card .card-hover-meta .rating i { font-size: 0.72rem; }
+
+/* ---------- Hover state ---------- */
+@media (hover: hover) {
+  .card:hover {
+    transform: scale(1.06);
+    z-index: 10;
+    box-shadow:
+      0 14px 36px rgba(0, 0, 0, 0.75),
+      0 0 0 2px rgba(255, 255, 255, 0.08);
+  }
+  .card:hover .card-img-wrap img     { transform: scale(1.03); }
+  .card:hover .card-hover-overlay    { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Focus state (TV remote / keyboard) ---------- */
+.card:focus-visible {
+  transform: scale(1.06);
+  z-index: 10;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.75),
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(229, 9, 20, 0.6);
+}
+.card:focus-visible .card-hover-overlay { opacity: 1; transform: translateY(0); }
+.card:focus-visible .card-img-wrap img  { transform: scale(1.03); }
+
+/* Edge cards in rows should scale toward center to stay in viewport */
+.row-content .card:first-child:hover,
+.row-content .card:first-child:focus-visible { transform-origin: center left; }
+.row-content .card:last-child:hover,
+.row-content .card:last-child:focus-visible  { transform-origin: center right; }
+
+/* Grid containers (movies/tvshows/search/genre pages) */
+.grid .card:hover,
+.grid .card:focus-visible,
+.movies-grid .card:hover,
+.movies-grid .card:focus-visible { transform-origin: center center; }
+
+/* ---------- Smaller screens: lighter scaling ---------- */
+@media (max-width: 768px) {
+  .card:hover,
+  .card:focus-visible { transform: scale(1.03); }
+  .card .card-hover-title { font-size: 0.85rem; }
+  .card .card-hover-meta  { font-size: 0.7rem; }
+  .card .hd-badge         { font-size: 9px; padding: 2px 5px; }
+}
+
+/* ---------- TV mode: bigger, more dramatic focus ---------- */
+body.tv-mode .card:focus-visible {
+  transform: scale(1.12);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.85),
+    0 0 0 4px #fff,
+    0 0 0 8px rgba(229, 9, 20, 0.75),
+    0 0 40px rgba(229, 9, 20, 0.4);
+}
+body.tv-mode .card .card-hover-title { font-size: 1.1rem; }
+body.tv-mode .card .card-hover-meta  { font-size: 0.88rem; }
