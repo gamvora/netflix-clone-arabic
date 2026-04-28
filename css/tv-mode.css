@@ -1,0 +1,259 @@
+/* ================================================================
+   NETFLIXY — ANDROID TV / SMART TV MODE STYLES
+   Only active when <body class="tv-mode">
+   Strong focus indicators visible from 10ft viewing distance.
+   ================================================================ */
+
+/* -------- Base focus ring (all devices, a11y) -------- */
+*:focus-visible {
+  outline: 3px solid #e50914;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* ================================================================
+   TV MODE ACTIVE
+   ================================================================ */
+
+body.tv-mode {
+  cursor: none; /* hide cursor on TV */
+}
+
+body.tv-mode.mouse-active {
+  cursor: default;
+}
+
+/* -------- Strong TV focus ring -------- */
+body.tv-mode *:focus,
+body.tv-mode *:focus-visible {
+  outline: 4px solid #ffffff !important;
+  outline-offset: 6px;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 4px #e50914,
+    0 0 30px 8px rgba(229, 9, 20, 0.7),
+    0 14px 40px rgba(0, 0, 0, 0.85) !important;
+  z-index: 50;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+body.tv-mode .card:focus,
+body.tv-mode .card:focus-visible,
+body.tv-mode .sim-card:focus,
+body.tv-mode .sim-card:focus-visible,
+body.tv-mode .profile-card:focus,
+body.tv-mode .profile-card:focus-visible,
+body.tv-mode .nf-ep-card:focus,
+body.tv-mode .nf-ep-card:focus-visible,
+body.tv-mode .modal-ep-item:focus,
+body.tv-mode .modal-ep-item:focus-visible,
+body.tv-mode .genre-card:focus,
+body.tv-mode .genre-card:focus-visible {
+  transform: scale(1.12) !important;
+  z-index: 100;
+  box-shadow:
+    0 0 0 5px #ffffff,
+    0 0 0 9px #e50914,
+    0 0 40px 14px rgba(229, 9, 20, 0.6),
+    0 20px 60px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Buttons get red fill on focus */
+body.tv-mode button:focus,
+body.tv-mode button:focus-visible,
+body.tv-mode .btn:focus,
+body.tv-mode .btn:focus-visible,
+body.tv-mode .hero-btn:focus,
+body.tv-mode .hero-btn:focus-visible,
+body.tv-mode .nav-link:focus,
+body.tv-mode .nav-link:focus-visible,
+body.tv-mode .genre-chip:focus,
+body.tv-mode .genre-chip:focus-visible {
+  transform: scale(1.08) !important;
+  outline: 3px solid #ffffff !important;
+  outline-offset: 4px;
+  box-shadow:
+    0 0 0 4px #e50914,
+    0 0 25px 6px rgba(229, 9, 20, 0.75) !important;
+}
+
+/* Focus pulse animation */
+@keyframes tv-focus-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px #e50914, 0 0 30px 8px rgba(229,9,20,0.7); }
+  50%      { box-shadow: 0 0 0 4px #e50914, 0 0 40px 14px rgba(229,9,20,0.95); }
+}
+body.tv-mode .card:focus-visible,
+body.tv-mode .sim-card:focus-visible {
+  animation: tv-focus-pulse 1.8s ease-in-out infinite;
+}
+
+/* Disable hover transforms on TV mode (only focus matters) */
+body.tv-mode .card:hover,
+body.tv-mode .sim-card:hover,
+body.tv-mode .nf-ep-card:hover,
+body.tv-mode .modal-ep-item:hover,
+body.tv-mode .btn:hover,
+body.tv-mode .nav-link:hover {
+  transform: none;
+}
+
+/* -------- Overscan safe area -------- */
+body.tv-mode .navbar {
+  padding-top: 24px;
+  padding-bottom: 18px;
+}
+
+body.tv-mode .hero {
+  padding-left: 4vw;
+  padding-right: 4vw;
+}
+
+body.tv-mode .row {
+  padding-left: 3vw;
+  padding-right: 3vw;
+  margin-bottom: 40px;
+}
+
+body.tv-mode footer,
+body.tv-mode .footer {
+  padding-bottom: 3vh;
+}
+
+/* -------- Bigger, clearer text on TV -------- */
+body.tv-mode {
+  font-size: 18px;
+}
+
+body.tv-mode .row-title,
+body.tv-mode .section-title {
+  font-size: 1.8rem;
+  margin-bottom: 14px;
+}
+
+body.tv-mode .hero-title {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+}
+
+body.tv-mode .hero-description {
+  font-size: 1.3rem;
+  max-width: 60%;
+}
+
+body.tv-mode .hero-btn {
+  padding: 14px 32px;
+  font-size: 1.15rem;
+}
+
+body.tv-mode .nav-link {
+  font-size: 1.1rem;
+  padding: 10px 16px;
+}
+
+body.tv-mode .logo {
+  font-size: 2.2rem;
+}
+
+body.tv-mode .card-title {
+  font-size: 1rem;
+  padding: 8px 6px;
+}
+
+/* -------- Larger cards -------- */
+body.tv-mode .card {
+  min-width: 220px;
+  min-height: 320px;
+}
+
+body.tv-mode .row-content {
+  gap: 12px;
+  padding: 30px 0;
+}
+
+/* -------- Modal / popup TV tweaks -------- */
+body.tv-mode .modal,
+body.tv-mode .modal-overlay .modal-content {
+  max-width: 85vw;
+  max-height: 85vh;
+}
+
+body.tv-mode .modal-ep-item {
+  padding: 14px;
+  min-height: 100px;
+}
+
+body.tv-mode .srv-picker-modal .srv-picker-btn {
+  min-height: 80px;
+  font-size: 1.3rem;
+  padding: 20px 30px;
+}
+
+/* -------- Smooth transitions for focus -------- */
+body.tv-mode .card,
+body.tv-mode .sim-card,
+body.tv-mode .nf-ep-card,
+body.tv-mode .modal-ep-item,
+body.tv-mode .profile-card,
+body.tv-mode .btn,
+body.tv-mode .nav-link,
+body.tv-mode .genre-chip,
+body.tv-mode .hero-btn {
+  transition: transform 0.22s cubic-bezier(0.4, 0.0, 0.2, 1),
+              box-shadow 0.22s cubic-bezier(0.4, 0.0, 0.2, 1),
+              outline-offset 0.15s ease !important;
+}
+
+/* -------- Hide small UI elements irrelevant on TV -------- */
+body.tv-mode .menu-toggle,
+body.tv-mode .scroll-btn {
+  display: none !important;
+}
+
+/* -------- Watch page overscan -------- */
+body.tv-mode .nf-iframe,
+body.tv-mode #nfFrame {
+  padding: 0 !important;
+}
+
+/* -------- Video player controls bigger on TV -------- */
+body.tv-mode .nf-tv-btn,
+body.tv-mode .nf-icon-btn {
+  min-width: 60px;
+  min-height: 60px;
+  font-size: 1.4rem;
+}
+
+/* -------- Keyboard-only focus style fallback (not in TV mode) -------- */
+body:not(.tv-mode) *:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* -------- Respect reduced-motion users -------- */
+@media (prefers-reduced-motion: reduce) {
+  body.tv-mode .card:focus-visible,
+  body.tv-mode .sim-card:focus-visible {
+    animation: none !important;
+  }
+  body.tv-mode *,
+  body.tv-mode *::before,
+  body.tv-mode *::after {
+    transition: none !important;
+  }
+}
+
+/* -------- Extra-large screens (TV 1080p+) -------- */
+@media (min-width: 1920px) {
+  body.tv-mode {
+    font-size: 22px;
+  }
+  body.tv-mode .card {
+    min-width: 260px;
+    min-height: 380px;
+  }
+  body.tv-mode .hero-title {
+    font-size: 6rem;
+  }
+  body.tv-mode .row-title {
+    font-size: 2.2rem;
+  }
+}
