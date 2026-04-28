@@ -39,20 +39,42 @@
   transition: transform 500ms ease;
 }
 
-/* ---------- HD badge (top-left corner) ---------- */
-.card .hd-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: linear-gradient(135deg, #e50914, #b00710);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 3px;
-  letter-spacing: 1px;
-  z-index: 3;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+/* ---------- HD badge (top-right corner, Netflix-style) ---------- */
+/* Override all other .hd-badge definitions from style.css + netflix-polish.css */
+.card .hd-badge,
+.card-img-wrap .hd-badge {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  left: auto !important;
+  bottom: auto !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-width: 26px;
+  height: 18px;
+  padding: 0 6px !important;
+
+  background: rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 3px !important;
+
+  color: #fff !important;
+  font-family: 'Netflix Sans', 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.8px !important;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+
+  z-index: 3 !important;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ---------- Hover overlay (hidden by default) ---------- */
@@ -151,7 +173,14 @@
   .card:focus-visible { transform: scale(1.03); }
   .card .card-hover-title { font-size: 0.85rem; }
   .card .card-hover-meta  { font-size: 0.7rem; }
-  .card .hd-badge         { font-size: 9px; padding: 2px 5px; }
+  .card .hd-badge {
+    font-size: 9px !important;
+    min-width: 22px;
+    height: 16px;
+    padding: 0 4px !important;
+    top: 6px !important;
+    right: 6px !important;
+  }
 }
 
 /* ---------- TV mode: bigger, more dramatic focus ---------- */
