@@ -201,22 +201,14 @@ const Utils = {
     const title = item.title || 'Unknown';
     const progress = Math.min(100, Math.max(2, item.progress || 0));
     const subtitle = item.type === 'tv' && item.season ? `الموسم ${item.season} • الحلقة ${item.episode || 1}` : (item.year || 'فيلم');
-    const preferred = (() => {
-      try {
-        return localStorage.getItem(`netflixServer_${item.type}_${item.id}`) || localStorage.getItem('netflixDefaultServer') || 'videasy';
-      } catch {
-        return 'videasy';
-      }
-    })();
-    const watchUrl = item.type === 'tv'
-      ? `watch.html?id=${item.id}&type=tv&s=${item.season || 1}&e=${item.episode || 1}&server=${preferred}&autoplay=1`
-      : `watch.html?id=${item.id}&type=movie&server=${preferred}&autoplay=1`;
+    // Note: clicking the card opens the details popup (handled by attachCardListeners).
+    // No direct watch link here — user must choose "تشغيل" or "متابعة المشاهدة" inside the popup.
     return `
       <div class="card card-continue" data-id="${item.id}" data-type="${item.type}" tabindex="0" style="animation-delay: ${index * 0.04}s">
         <div class="card-img-wrap continue-img-wrap">
           <img src="${backdrop}" alt="${title}" loading="lazy" onerror="this.src='${CONFIG.DEFAULT_BACKDROP}'">
           <div class="continue-overlay">
-            <a href="${watchUrl}" class="continue-play"><i class="fas fa-play-circle"></i></a>
+            <div class="continue-play" title="عرض التفاصيل"><i class="fas fa-play-circle"></i></div>
             <button class="continue-remove" title="إزالة" data-id="${item.id}" data-type="${item.type}"><i class="fas fa-times"></i></button>
           </div>
           <div class="continue-progress"><div class="continue-progress-bar" style="width: ${progress}%"></div></div>
@@ -243,6 +235,7 @@ const Utils = {
     container.querySelectorAll('.card').forEach(card => {
       const id = card.dataset.id, type = card.dataset.type;
       card.addEventListener('click', (e) => {
+        // Remove button on Continue Watching card — handled first and stops propagation
         if (e.target.closest('.continue-remove')) {
           e.preventDefault(); e.stopPropagation();
           const btn = e.target.closest('.continue-remove');
@@ -251,11 +244,10 @@ const Utils = {
           card.style.transform = 'scale(0)'; card.style.opacity = '0';
           setTimeout(() => card.remove(), 300); return;
         }
+        // Continue Watching card → open details popup with resume option
         if (card.classList.contains('card-continue')) {
-          if (!e.target.closest('a')) {
-            const link = card.querySelector('.continue-play');
-            if (link) window.location.href = link.href;
-          }
+          e.preventDefault(); e.stopPropagation();
+          this.openDetailsModal(id, type, { continueWatching: true });
           return;
         }
         if (e.target.closest('.btn-play') || e.target.closest('.card-play-hover')) {
@@ -447,7 +439,7 @@ const Utils = {
     this._toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
   },
 
-  async openDetailsModal(id, type) {
+  async openDetailsModal(id, type, options = {}) {
     const modal = document.getElementById('detailsModal');
     if (!modal) return;
     modal.classList.add('active');
@@ -475,6 +467,16 @@ const Utils = {
     const similar = ((details.similar && details.similar.results) || []).filter(s => s.backdrop_path || s.poster_path).slice(0, 8);
     const overview = this.getOverviewSafe(details);
 
+    // Check continue-watching data for this item (used to show "Resume" button)
+    const continueList = this.getContinueWatching();
+    const cwEntry = continueList.find(x => String(x.id) === String(id) && x.type === type);
+    const showResume = !!cwEntry || options.continueWatching;
+    const resumeSeason = cwEntry && cwEntry.season ? cwEntry.season : 1;
+    const resumeEpisode = cwEntry && cwEntry.episode ? cwEntry.episode : 1;
+    const resumeLabel = type === 'tv'
+      ? `متابعة (ح${resumeEpisode} - الموسم ${resumeSeason})`
+      : 'متابعة المشاهدة';
+
     body.innerHTML = `
       <div class="modal-hero" style="background-image: linear-gradient(to top, #181818 5%, transparent 60%), url('${backdrop}')">
         <div class="modal-hero-content">
@@ -482,6 +484,11 @@ const Utils = {
           ${showArTitle ? `<div class="modal-ar-title">${titleAr}</div>` : ''}
           <div class="modal-actions">
             <button class="btn btn-primary btn-play-modal" data-id="${id}" data-type="${type}"><i class="fas fa-play"></i> تشغيل</button>
+            ${showResume ? `
+              <button class="btn btn-resume btn-resume-modal" data-id="${id}" data-type="${type}" data-season="${resumeSeason}" data-episode="${resumeEpisode}">
+                <i class="fas fa-redo"></i> ${resumeLabel}
+              </button>
+            ` : ''}
             <button class="btn btn-secondary btn-trailer-modal" data-key="${trailer ? trailer.key : ''}" data-id="${id}" data-type="${type}"><i class="fas fa-film"></i> الإعلان الدعائي</button>
             <button class="btn-circle btn-toggle-list" data-id="${id}" data-type="${type}" title="${inList ? 'إزالة من قائمتي' : 'أضف لقائمتي'}"><i class="fas ${inList ? 'fa-check' : 'fa-plus'}"></i></button>
           </div>
@@ -504,6 +511,21 @@ const Utils = {
           ${details.number_of_seasons ? `<p><span class="dim">المواسم:</span> ${details.number_of_seasons}</p>` : ''}
         </div>
       </div>
+      ${type === 'tv' && details.seasons && details.seasons.filter(s => s.season_number > 0).length ? `
+        <div class="modal-episodes">
+          <div class="modal-ep-header">
+            <h3>الحلقات</h3>
+            <select class="modal-season-select" id="modalSeasonSelect">
+              ${details.seasons.filter(s => s.season_number > 0).map(s =>
+                `<option value="${s.season_number}" ${s.season_number === resumeSeason ? 'selected' : ''}>الموسم ${s.season_number}</option>`
+              ).join('')}
+            </select>
+          </div>
+          <div class="modal-ep-list" id="modalEpList">
+            <div class="loader"><i class="fas fa-spinner fa-spin"></i></div>
+          </div>
+        </div>
+      ` : ''}
       ${similar.length ? `
         <div class="modal-similar">
           <h3>محتوى مشابه</h3>
@@ -538,15 +560,38 @@ const Utils = {
     const playModalBtn = body.querySelector('.btn-play-modal');
     if (playModalBtn) {
       playModalBtn.addEventListener('click', () => {
-        // Close the details modal first, then show the server picker
+        // "تشغيل" = start from beginning → open server picker
         const detailsModal = document.getElementById('detailsModal');
-        if (detailsModal) {
-          detailsModal.classList.remove('active');
-        }
+        if (detailsModal) detailsModal.classList.remove('active');
         document.body.style.overflow = '';
         this.showServerPicker({ id: playModalBtn.dataset.id, type: playModalBtn.dataset.type });
       });
     }
+
+    // "متابعة المشاهدة" — jump directly to saved episode/position (no server picker, use saved server)
+    const resumeBtn = body.querySelector('.btn-resume-modal');
+    if (resumeBtn) {
+      resumeBtn.addEventListener('click', () => {
+        const rId = resumeBtn.dataset.id;
+        const rType = resumeBtn.dataset.type;
+        const rSeason = resumeBtn.dataset.season || 1;
+        const rEpisode = resumeBtn.dataset.episode || 1;
+        let preferred = 'videasy';
+        try {
+          preferred = localStorage.getItem(`netflixServer_${rType}_${rId}`)
+                   || localStorage.getItem('netflixDefaultServer')
+                   || 'videasy';
+        } catch {}
+        const detailsModal = document.getElementById('detailsModal');
+        if (detailsModal) detailsModal.classList.remove('active');
+        document.body.style.overflow = '';
+        const watchUrl = rType === 'tv'
+          ? `watch.html?id=${rId}&type=tv&s=${rSeason}&e=${rEpisode}&server=${preferred}&autoplay=1`
+          : `watch.html?id=${rId}&type=movie&server=${preferred}&autoplay=1`;
+        window.location.assign(watchUrl);
+      });
+    }
+
     body.querySelectorAll('.sim-card').forEach(simBtn => {
       simBtn.addEventListener('click', () => {
         const detailsModal = document.getElementById('detailsModal');
@@ -555,6 +600,7 @@ const Utils = {
         this.showServerPicker({ id: simBtn.dataset.simId, type: simBtn.dataset.simType });
       });
     });
+
     const addBtn = body.querySelector('.btn-toggle-list');
     if (addBtn) {
       addBtn.addEventListener('click', () => {
@@ -564,6 +610,75 @@ const Utils = {
         if (icon) icon.className = added ? 'fas fa-check' : 'fas fa-plus';
         addBtn.title = added ? 'إزالة من قائمتي' : 'أضف لقائمتي';
       });
+    }
+
+    // Episodes list inside modal (TV shows only)
+    const seasonSelect = body.querySelector('#modalSeasonSelect');
+    const epListEl = body.querySelector('#modalEpList');
+    if (seasonSelect && epListEl) {
+      const loadEpisodesInModal = async (seasonNum) => {
+        epListEl.innerHTML = '<div class="loader"><i class="fas fa-spinner fa-spin"></i></div>';
+        try {
+          const seasonData = await API.getSeasonDetails(id, seasonNum);
+          const episodes = (seasonData && seasonData.episodes) || [];
+          if (!episodes.length) {
+            epListEl.innerHTML = '<p class="modal-ep-empty">لا توجد حلقات متاحة</p>';
+            return;
+          }
+          epListEl.innerHTML = episodes.map(ep => {
+            const thumb = ep.still_path
+              ? `${CONFIG.IMG_URL_W500}${ep.still_path}`
+              : this.getBackdrop(details.backdrop_path);
+            const epName = ep.name || `الحلقة ${ep.episode_number}`;
+            const runtime = ep.runtime ? `${ep.runtime} د` : '';
+            const desc = ep.overview || 'لا يوجد وصف متاح.';
+            const isResume = cwEntry && cwEntry.season === seasonNum && cwEntry.episode === ep.episode_number;
+            return `
+              <button class="modal-ep-item ${isResume ? 'is-resume' : ''}" data-season="${seasonNum}" data-episode="${ep.episode_number}">
+                <div class="modal-ep-num">${ep.episode_number}</div>
+                <div class="modal-ep-thumb">
+                  <img src="${thumb}" alt="${epName}" loading="lazy" onerror="this.src='${CONFIG.DEFAULT_BACKDROP}'">
+                  <div class="modal-ep-play-ov"><i class="fas fa-play"></i></div>
+                  ${isResume ? '<span class="modal-ep-badge">متابعة</span>' : ''}
+                </div>
+                <div class="modal-ep-info">
+                  <div class="modal-ep-title-row">
+                    <h4>${epName}</h4>
+                    ${runtime ? `<span class="modal-ep-time">${runtime}</span>` : ''}
+                  </div>
+                  <p class="modal-ep-desc">${this.truncate(desc, 180)}</p>
+                </div>
+              </button>
+            `;
+          }).join('');
+
+          // Episode click → go to watch.html with selected episode
+          epListEl.querySelectorAll('.modal-ep-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const s = item.dataset.season;
+              const e = item.dataset.episode;
+              let pref = 'videasy';
+              try {
+                pref = localStorage.getItem(`netflixServer_tv_${id}`)
+                    || localStorage.getItem('netflixDefaultServer')
+                    || 'videasy';
+              } catch {}
+              const dm = document.getElementById('detailsModal');
+              if (dm) dm.classList.remove('active');
+              document.body.style.overflow = '';
+              window.location.assign(`watch.html?id=${id}&type=tv&s=${s}&e=${e}&server=${pref}&autoplay=1`);
+            });
+          });
+        } catch (err) {
+          epListEl.innerHTML = '<p class="modal-ep-empty">تعذر تحميل الحلقات</p>';
+        }
+      };
+
+      seasonSelect.addEventListener('change', () => {
+        loadEpisodesInModal(parseInt(seasonSelect.value, 10));
+      });
+      // Initial load
+      loadEpisodesInModal(parseInt(seasonSelect.value, 10));
     }
   },
 

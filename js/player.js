@@ -17,8 +17,9 @@ const SERVERS = [
     name: '111Movies',
     nameAr: 'السيرفر 2',
     host: '111movies.com',
-    movieUrl: (id) => `https://111movies.com/movie/${id}`,
-    tvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}`
+    // Arabic + autoplay hints (ignored if unsupported, won't break playback)
+    movieUrl: (id) => `https://111movies.com/movie/${id}?lang=ar&sub=ar&subtitle=ar&defaultSubtitle=ar&autoplay=1&autoPlay=1`,
+    tvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}?lang=ar&sub=ar&subtitle=ar&defaultSubtitle=ar&autoplay=1&autoPlay=1&nextEpisode=true&autoNextEpisode=true`
   }
 ];
 
